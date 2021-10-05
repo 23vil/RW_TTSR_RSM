@@ -1,0 +1,4 @@
+[2021-08-30 17:34:22,634] - [trainer.py file line:64] - INFO: load_model_path: ./pretrainedModels/model_00001.pt
+[2021-08-30 17:34:22,770] - [trainer.py file line:273] - INFO: Test process...
+[2021-08-30 17:34:22,771] - [trainer.py file line:274] - INFO: lr path:     ./test/demo/lr/82.tif
+[2021-08-30 17:34:22,771] - [trainer.py file line:275] - INFO: ref path:    ./test/demo/ref/83.tif

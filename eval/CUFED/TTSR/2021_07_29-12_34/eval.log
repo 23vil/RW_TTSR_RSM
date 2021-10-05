@@ -1,0 +1,5 @@
+[2021-07-29 12:34:18,299] - [trainer.py file line:49] - INFO: load_model_path: ./pretrainedModels/TTSR.pt
+[2021-07-29 12:34:24,976] - [trainer.py file line:139] - INFO: Epoch 0 evaluation process...
+[2021-07-29 13:16:12,625] - [trainer.py file line:169] - INFO: Ref  PSNR (now): 23.685 	 SSIM (now): 0.7137
+[2021-07-29 13:16:13,107] - [trainer.py file line:176] - INFO: Ref  PSNR (max): 23.685 (0) 	 SSIM (max): 0.7137 (0)
+[2021-07-29 13:16:13,107] - [trainer.py file line:179] - INFO: Evaluation over.

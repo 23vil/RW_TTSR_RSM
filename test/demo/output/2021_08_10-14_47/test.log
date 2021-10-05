@@ -1,0 +1,6 @@
+[2021-08-10 14:47:29,224] - [trainer.py file line:53] - INFO: load_model_path: ./pretrainedModels/Microtest_model4_00030.pt
+[2021-08-10 14:47:29,324] - [trainer.py file line:191] - INFO: Test process...
+[2021-08-10 14:47:29,324] - [trainer.py file line:192] - INFO: lr path:     ./test/demo/lr/000013_10.tif
+[2021-08-10 14:47:29,324] - [trainer.py file line:193] - INFO: ref path:    ./test/demo/ref/6.tif
+[2021-08-10 14:47:29,508] - [trainer.py file line:237] - INFO: output path: ./test/demo/output/2021_08_10-14_47/save_results/000013_10.tif
+[2021-08-10 14:47:29,508] - [trainer.py file line:239] - INFO: Test over.

@@ -1,0 +1,265 @@
+[2021-09-20 18:53:09,574] - [trainer.py file line:92] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-09-20 18:53:10,509] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 1
+[2021-09-20 18:53:10,510] - [trainer.py file line:127] - INFO: rec_loss: 0.2209479660
+[2021-09-20 18:53:10,525] - [trainer.py file line:137] - INFO: per_loss: 0.0114903348
+[2021-09-20 18:53:10,537] - [trainer.py file line:146] - INFO: tpl_loss: 0.0068340907
+[2021-09-20 18:53:10,719] - [trainer.py file line:152] - INFO: adv_loss: 0.0009914081
+[2021-09-20 18:53:10,719] - [trainer.py file line:155] - INFO: total_loss: 0.2402637899
+[2021-09-20 18:53:11,110] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 2
+[2021-09-20 18:53:11,110] - [trainer.py file line:127] - INFO: rec_loss: 0.2131901830
+[2021-09-20 18:53:11,122] - [trainer.py file line:137] - INFO: per_loss: 0.0110091018
+[2021-09-20 18:53:11,127] - [trainer.py file line:146] - INFO: tpl_loss: 0.0058551691
+[2021-09-20 18:53:11,343] - [trainer.py file line:152] - INFO: adv_loss: 0.0026394278
+[2021-09-20 18:53:11,348] - [trainer.py file line:155] - INFO: total_loss: 0.2326938808
+[2021-09-20 18:53:11,669] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 3
+[2021-09-20 18:53:11,715] - [trainer.py file line:127] - INFO: rec_loss: 0.2223980129
+[2021-09-20 18:53:11,723] - [trainer.py file line:137] - INFO: per_loss: 0.0119124101
+[2021-09-20 18:53:11,728] - [trainer.py file line:146] - INFO: tpl_loss: 0.0050347177
+[2021-09-20 18:53:11,894] - [trainer.py file line:152] - INFO: adv_loss: 0.0046577025
+[2021-09-20 18:53:11,894] - [trainer.py file line:155] - INFO: total_loss: 0.2440028340
+[2021-09-20 18:53:12,199] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 4
+[2021-09-20 18:53:12,222] - [trainer.py file line:127] - INFO: rec_loss: 0.1669896245
+[2021-09-20 18:53:12,228] - [trainer.py file line:137] - INFO: per_loss: 0.0084937010
+[2021-09-20 18:53:12,231] - [trainer.py file line:146] - INFO: tpl_loss: 0.0044267685
+[2021-09-20 18:53:12,421] - [trainer.py file line:152] - INFO: adv_loss: 0.0040622414
+[2021-09-20 18:53:12,422] - [trainer.py file line:155] - INFO: total_loss: 0.1839723289
+[2021-09-20 18:53:12,743] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 5
+[2021-09-20 18:53:12,745] - [trainer.py file line:127] - INFO: rec_loss: 0.1802701354
+[2021-09-20 18:53:12,753] - [trainer.py file line:137] - INFO: per_loss: 0.0105993869
+[2021-09-20 18:53:12,758] - [trainer.py file line:146] - INFO: tpl_loss: 0.0045238277
+[2021-09-20 18:53:12,916] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:12,917] - [trainer.py file line:155] - INFO: total_loss: 0.1953933537
+[2021-09-20 18:53:13,208] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 6
+[2021-09-20 18:53:13,224] - [trainer.py file line:127] - INFO: rec_loss: 0.1533299983
+[2021-09-20 18:53:13,233] - [trainer.py file line:137] - INFO: per_loss: 0.0095441164
+[2021-09-20 18:53:13,239] - [trainer.py file line:146] - INFO: tpl_loss: 0.0044281594
+[2021-09-20 18:53:13,453] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:13,454] - [trainer.py file line:155] - INFO: total_loss: 0.1673022807
+[2021-09-20 18:53:13,791] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 7
+[2021-09-20 18:53:13,793] - [trainer.py file line:127] - INFO: rec_loss: 0.1349954605
+[2021-09-20 18:53:13,803] - [trainer.py file line:137] - INFO: per_loss: 0.0098293899
+[2021-09-20 18:53:13,810] - [trainer.py file line:146] - INFO: tpl_loss: 0.0042643030
+[2021-09-20 18:53:14,012] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:14,013] - [trainer.py file line:155] - INFO: total_loss: 0.1490891576
+[2021-09-20 18:53:14,317] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 8
+[2021-09-20 18:53:14,353] - [trainer.py file line:127] - INFO: rec_loss: 0.1398771107
+[2021-09-20 18:53:14,359] - [trainer.py file line:137] - INFO: per_loss: 0.0100297472
+[2021-09-20 18:53:14,361] - [trainer.py file line:146] - INFO: tpl_loss: 0.0045907209
+[2021-09-20 18:53:14,472] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:14,473] - [trainer.py file line:155] - INFO: total_loss: 0.1544975787
+[2021-09-20 18:53:14,734] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 9
+[2021-09-20 18:53:14,761] - [trainer.py file line:127] - INFO: rec_loss: 0.1879203618
+[2021-09-20 18:53:14,769] - [trainer.py file line:137] - INFO: per_loss: 0.0107031586
+[2021-09-20 18:53:14,775] - [trainer.py file line:146] - INFO: tpl_loss: 0.0040241736
+[2021-09-20 18:53:15,007] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:15,008] - [trainer.py file line:155] - INFO: total_loss: 0.2026477009
+[2021-09-20 18:53:15,324] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 10
+[2021-09-20 18:53:15,352] - [trainer.py file line:127] - INFO: rec_loss: 0.1459594369
+[2021-09-20 18:53:15,358] - [trainer.py file line:137] - INFO: per_loss: 0.0103552565
+[2021-09-20 18:53:15,360] - [trainer.py file line:146] - INFO: tpl_loss: 0.0042002220
+[2021-09-20 18:53:15,477] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:15,478] - [trainer.py file line:155] - INFO: total_loss: 0.1605149209
+[2021-09-20 18:53:15,694] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 11
+[2021-09-20 18:53:15,741] - [trainer.py file line:127] - INFO: rec_loss: 0.1309608072
+[2021-09-20 18:53:15,747] - [trainer.py file line:137] - INFO: per_loss: 0.0092172157
+[2021-09-20 18:53:15,749] - [trainer.py file line:146] - INFO: tpl_loss: 0.0038588771
+[2021-09-20 18:53:15,892] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:15,893] - [trainer.py file line:155] - INFO: total_loss: 0.1440369040
+[2021-09-20 18:53:16,194] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 12
+[2021-09-20 18:53:16,195] - [trainer.py file line:127] - INFO: rec_loss: 0.1093007326
+[2021-09-20 18:53:16,206] - [trainer.py file line:137] - INFO: per_loss: 0.0079171462
+[2021-09-20 18:53:16,214] - [trainer.py file line:146] - INFO: tpl_loss: 0.0036597673
+[2021-09-20 18:53:16,423] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:16,424] - [trainer.py file line:155] - INFO: total_loss: 0.1208776459
+[2021-09-20 18:53:16,681] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 13
+[2021-09-20 18:53:16,723] - [trainer.py file line:127] - INFO: rec_loss: 0.1650731564
+[2021-09-20 18:53:16,729] - [trainer.py file line:137] - INFO: per_loss: 0.0096471775
+[2021-09-20 18:53:16,732] - [trainer.py file line:146] - INFO: tpl_loss: 0.0039161602
+[2021-09-20 18:53:16,919] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:16,920] - [trainer.py file line:155] - INFO: total_loss: 0.1786364913
+[2021-09-20 18:53:17,262] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 14
+[2021-09-20 18:53:17,263] - [trainer.py file line:127] - INFO: rec_loss: 0.1277682483
+[2021-09-20 18:53:17,274] - [trainer.py file line:137] - INFO: per_loss: 0.0099127712
+[2021-09-20 18:53:17,280] - [trainer.py file line:146] - INFO: tpl_loss: 0.0037281595
+[2021-09-20 18:53:17,516] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:17,517] - [trainer.py file line:155] - INFO: total_loss: 0.1414091885
+[2021-09-20 18:53:17,789] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 15
+[2021-09-20 18:53:17,826] - [trainer.py file line:127] - INFO: rec_loss: 0.1355269998
+[2021-09-20 18:53:17,832] - [trainer.py file line:137] - INFO: per_loss: 0.0089336075
+[2021-09-20 18:53:17,836] - [trainer.py file line:146] - INFO: tpl_loss: 0.0033774865
+[2021-09-20 18:53:18,045] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:18,046] - [trainer.py file line:155] - INFO: total_loss: 0.1478380859
+[2021-09-20 18:53:18,336] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 16
+[2021-09-20 18:53:18,356] - [trainer.py file line:127] - INFO: rec_loss: 0.1686089933
+[2021-09-20 18:53:18,367] - [trainer.py file line:137] - INFO: per_loss: 0.0091985287
+[2021-09-20 18:53:18,373] - [trainer.py file line:146] - INFO: tpl_loss: 0.0031932979
+[2021-09-20 18:53:18,592] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:18,593] - [trainer.py file line:155] - INFO: total_loss: 0.1810008287
+[2021-09-20 18:53:18,897] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 17
+[2021-09-20 18:53:18,926] - [trainer.py file line:127] - INFO: rec_loss: 0.1264893860
+[2021-09-20 18:53:18,939] - [trainer.py file line:137] - INFO: per_loss: 0.0072556934
+[2021-09-20 18:53:18,945] - [trainer.py file line:146] - INFO: tpl_loss: 0.0029584463
+[2021-09-20 18:53:19,064] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:19,065] - [trainer.py file line:155] - INFO: total_loss: 0.1367035210
+[2021-09-20 18:53:19,307] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 18
+[2021-09-20 18:53:19,342] - [trainer.py file line:127] - INFO: rec_loss: 0.1163979769
+[2021-09-20 18:53:19,348] - [trainer.py file line:137] - INFO: per_loss: 0.0090709990
+[2021-09-20 18:53:19,352] - [trainer.py file line:146] - INFO: tpl_loss: 0.0030057733
+[2021-09-20 18:53:19,452] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:19,453] - [trainer.py file line:155] - INFO: total_loss: 0.1284747422
+[2021-09-20 18:53:19,774] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 19
+[2021-09-20 18:53:19,786] - [trainer.py file line:127] - INFO: rec_loss: 0.1554616988
+[2021-09-20 18:53:19,795] - [trainer.py file line:137] - INFO: per_loss: 0.0087074041
+[2021-09-20 18:53:19,798] - [trainer.py file line:146] - INFO: tpl_loss: 0.0033511925
+[2021-09-20 18:53:19,920] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:19,921] - [trainer.py file line:155] - INFO: total_loss: 0.1675202996
+[2021-09-20 18:53:20,155] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 20
+[2021-09-20 18:53:20,204] - [trainer.py file line:127] - INFO: rec_loss: 0.1219082102
+[2021-09-20 18:53:20,210] - [trainer.py file line:137] - INFO: per_loss: 0.0093054110
+[2021-09-20 18:53:20,213] - [trainer.py file line:146] - INFO: tpl_loss: 0.0032964763
+[2021-09-20 18:53:20,328] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:20,329] - [trainer.py file line:155] - INFO: total_loss: 0.1345100999
+[2021-09-20 18:53:20,619] - [trainer.py file line:161] - INFO: saving the model...
+[2021-09-20 18:53:22,952] - [trainer.py file line:169] - INFO: Epoch 1 evaluation process...
+[2021-09-20 18:53:26,005] - [trainer.py file line:312] - INFO: val_rec_loss: 0.1165962443
+[2021-09-20 18:53:26,005] - [trainer.py file line:313] - INFO: val_per_loss: 0.0095528355
+[2021-09-20 18:53:26,006] - [trainer.py file line:314] - INFO: val_tpl_loss: 0.0033427016
+[2021-09-20 18:53:26,006] - [trainer.py file line:315] - INFO: val_adv_loss: 0.0000000000
+[2021-09-20 18:53:26,006] - [trainer.py file line:316] - INFO: total_val_loss: 0.1294917762
+[2021-09-20 18:53:26,006] - [trainer.py file line:368] - INFO: Ref  PSNR (now): 23.926 	 SSIM (now): 0.4138
+[2021-09-20 18:53:26,006] - [trainer.py file line:375] - INFO: Ref  PSNR (max): 23.926 (1) 	 SSIM (max): 0.4138 (1)
+[2021-09-20 18:53:26,006] - [trainer.py file line:378] - INFO: Evaluation over.
+[2021-09-20 18:53:26,009] - [trainer.py file line:92] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-09-20 18:53:26,698] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 1
+[2021-09-20 18:53:26,698] - [trainer.py file line:127] - INFO: rec_loss: 0.1041658670
+[2021-09-20 18:53:26,708] - [trainer.py file line:137] - INFO: per_loss: 0.0094107380
+[2021-09-20 18:53:26,716] - [trainer.py file line:146] - INFO: tpl_loss: 0.0030874796
+[2021-09-20 18:53:26,947] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:26,948] - [trainer.py file line:155] - INFO: total_loss: 0.1166640818
+[2021-09-20 18:53:27,187] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 2
+[2021-09-20 18:53:27,234] - [trainer.py file line:127] - INFO: rec_loss: 0.1231327206
+[2021-09-20 18:53:27,240] - [trainer.py file line:137] - INFO: per_loss: 0.0102182077
+[2021-09-20 18:53:27,242] - [trainer.py file line:146] - INFO: tpl_loss: 0.0035265360
+[2021-09-20 18:53:27,353] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:27,354] - [trainer.py file line:155] - INFO: total_loss: 0.1368774623
+[2021-09-20 18:53:27,573] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 3
+[2021-09-20 18:53:27,620] - [trainer.py file line:127] - INFO: rec_loss: 0.1106029674
+[2021-09-20 18:53:27,626] - [trainer.py file line:137] - INFO: per_loss: 0.0097619807
+[2021-09-20 18:53:27,628] - [trainer.py file line:146] - INFO: tpl_loss: 0.0033940764
+[2021-09-20 18:53:27,758] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:27,759] - [trainer.py file line:155] - INFO: total_loss: 0.1237590238
+[2021-09-20 18:53:27,997] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 4
+[2021-09-20 18:53:28,045] - [trainer.py file line:127] - INFO: rec_loss: 0.1328240037
+[2021-09-20 18:53:28,051] - [trainer.py file line:137] - INFO: per_loss: 0.0109450836
+[2021-09-20 18:53:28,053] - [trainer.py file line:146] - INFO: tpl_loss: 0.0038256131
+[2021-09-20 18:53:28,178] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:28,178] - [trainer.py file line:155] - INFO: total_loss: 0.1475947052
+[2021-09-20 18:53:28,510] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 5
+[2021-09-20 18:53:28,511] - [trainer.py file line:127] - INFO: rec_loss: 0.1063820943
+[2021-09-20 18:53:28,521] - [trainer.py file line:137] - INFO: per_loss: 0.0091497917
+[2021-09-20 18:53:28,533] - [trainer.py file line:146] - INFO: tpl_loss: 0.0029799228
+[2021-09-20 18:53:28,762] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:28,763] - [trainer.py file line:155] - INFO: total_loss: 0.1185118034
+[2021-09-20 18:53:29,099] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 6
+[2021-09-20 18:53:29,128] - [trainer.py file line:127] - INFO: rec_loss: 0.1221129745
+[2021-09-20 18:53:29,134] - [trainer.py file line:137] - INFO: per_loss: 0.0104609746
+[2021-09-20 18:53:29,138] - [trainer.py file line:146] - INFO: tpl_loss: 0.0032210508
+[2021-09-20 18:53:29,341] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:29,342] - [trainer.py file line:155] - INFO: total_loss: 0.1357949972
+[2021-09-20 18:53:29,628] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 7
+[2021-09-20 18:53:29,660] - [trainer.py file line:127] - INFO: rec_loss: 0.1182385609
+[2021-09-20 18:53:29,666] - [trainer.py file line:137] - INFO: per_loss: 0.0090551879
+[2021-09-20 18:53:29,673] - [trainer.py file line:146] - INFO: tpl_loss: 0.0031156274
+[2021-09-20 18:53:29,816] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:29,817] - [trainer.py file line:155] - INFO: total_loss: 0.1304093748
+[2021-09-20 18:53:30,036] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 8
+[2021-09-20 18:53:30,081] - [trainer.py file line:127] - INFO: rec_loss: 0.0958121270
+[2021-09-20 18:53:30,087] - [trainer.py file line:137] - INFO: per_loss: 0.0079571363
+[2021-09-20 18:53:30,090] - [trainer.py file line:146] - INFO: tpl_loss: 0.0027973312
+[2021-09-20 18:53:30,207] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:30,207] - [trainer.py file line:155] - INFO: total_loss: 0.1065665931
+[2021-09-20 18:53:30,529] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 9
+[2021-09-20 18:53:30,560] - [trainer.py file line:127] - INFO: rec_loss: 0.1010623574
+[2021-09-20 18:53:30,566] - [trainer.py file line:137] - INFO: per_loss: 0.0072306469
+[2021-09-20 18:53:30,569] - [trainer.py file line:146] - INFO: tpl_loss: 0.0026323914
+[2021-09-20 18:53:30,726] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:30,727] - [trainer.py file line:155] - INFO: total_loss: 0.1109253988
+[2021-09-20 18:53:31,020] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 10
+[2021-09-20 18:53:31,050] - [trainer.py file line:127] - INFO: rec_loss: 0.1214912236
+[2021-09-20 18:53:31,057] - [trainer.py file line:137] - INFO: per_loss: 0.0093791131
+[2021-09-20 18:53:31,060] - [trainer.py file line:146] - INFO: tpl_loss: 0.0030446881
+[2021-09-20 18:53:31,213] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:31,213] - [trainer.py file line:155] - INFO: total_loss: 0.1339150369
+[2021-09-20 18:53:31,506] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 11
+[2021-09-20 18:53:31,514] - [trainer.py file line:127] - INFO: rec_loss: 0.1174450517
+[2021-09-20 18:53:31,525] - [trainer.py file line:137] - INFO: per_loss: 0.0093723787
+[2021-09-20 18:53:31,531] - [trainer.py file line:146] - INFO: tpl_loss: 0.0029639297
+[2021-09-20 18:53:31,740] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:31,742] - [trainer.py file line:155] - INFO: total_loss: 0.1297813654
+[2021-09-20 18:53:32,024] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 12
+[2021-09-20 18:53:32,046] - [trainer.py file line:127] - INFO: rec_loss: 0.1152473912
+[2021-09-20 18:53:32,058] - [trainer.py file line:137] - INFO: per_loss: 0.0099167135
+[2021-09-20 18:53:32,066] - [trainer.py file line:146] - INFO: tpl_loss: 0.0028611931
+[2021-09-20 18:53:32,243] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:32,244] - [trainer.py file line:155] - INFO: total_loss: 0.1280252934
+[2021-09-20 18:53:32,490] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 13
+[2021-09-20 18:53:32,524] - [trainer.py file line:127] - INFO: rec_loss: 0.1073591337
+[2021-09-20 18:53:32,531] - [trainer.py file line:137] - INFO: per_loss: 0.0090212896
+[2021-09-20 18:53:32,534] - [trainer.py file line:146] - INFO: tpl_loss: 0.0028793791
+[2021-09-20 18:53:32,677] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:32,677] - [trainer.py file line:155] - INFO: total_loss: 0.1192598045
+[2021-09-20 18:53:32,977] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 14
+[2021-09-20 18:53:32,994] - [trainer.py file line:127] - INFO: rec_loss: 0.1144058928
+[2021-09-20 18:53:33,004] - [trainer.py file line:137] - INFO: per_loss: 0.0093235215
+[2021-09-20 18:53:33,012] - [trainer.py file line:146] - INFO: tpl_loss: 0.0031131688
+[2021-09-20 18:53:33,159] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:33,160] - [trainer.py file line:155] - INFO: total_loss: 0.1268425882
+[2021-09-20 18:53:33,439] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 15
+[2021-09-20 18:53:33,468] - [trainer.py file line:127] - INFO: rec_loss: 0.1167565435
+[2021-09-20 18:53:33,474] - [trainer.py file line:137] - INFO: per_loss: 0.0104617709
+[2021-09-20 18:53:33,478] - [trainer.py file line:146] - INFO: tpl_loss: 0.0031779998
+[2021-09-20 18:53:33,646] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:33,647] - [trainer.py file line:155] - INFO: total_loss: 0.1303963214
+[2021-09-20 18:53:33,862] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 16
+[2021-09-20 18:53:33,909] - [trainer.py file line:127] - INFO: rec_loss: 0.1158387884
+[2021-09-20 18:53:33,916] - [trainer.py file line:137] - INFO: per_loss: 0.0104279537
+[2021-09-20 18:53:33,923] - [trainer.py file line:146] - INFO: tpl_loss: 0.0031091406
+[2021-09-20 18:53:34,118] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:34,119] - [trainer.py file line:155] - INFO: total_loss: 0.1293758899
+[2021-09-20 18:53:34,424] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 17
+[2021-09-20 18:53:34,428] - [trainer.py file line:127] - INFO: rec_loss: 0.1062356457
+[2021-09-20 18:53:34,436] - [trainer.py file line:137] - INFO: per_loss: 0.0087481476
+[2021-09-20 18:53:34,440] - [trainer.py file line:146] - INFO: tpl_loss: 0.0028100125
+[2021-09-20 18:53:34,587] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:34,588] - [trainer.py file line:155] - INFO: total_loss: 0.1177938133
+[2021-09-20 18:53:34,849] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 18
+[2021-09-20 18:53:34,889] - [trainer.py file line:127] - INFO: rec_loss: 0.0961607546
+[2021-09-20 18:53:34,895] - [trainer.py file line:137] - INFO: per_loss: 0.0078911446
+[2021-09-20 18:53:34,899] - [trainer.py file line:146] - INFO: tpl_loss: 0.0025933890
+[2021-09-20 18:53:35,037] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:35,037] - [trainer.py file line:155] - INFO: total_loss: 0.1066452935
+[2021-09-20 18:53:35,318] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 19
+[2021-09-20 18:53:35,353] - [trainer.py file line:127] - INFO: rec_loss: 0.0962511003
+[2021-09-20 18:53:35,360] - [trainer.py file line:137] - INFO: per_loss: 0.0068824850
+[2021-09-20 18:53:35,363] - [trainer.py file line:146] - INFO: tpl_loss: 0.0024423485
+[2021-09-20 18:53:35,458] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:35,458] - [trainer.py file line:155] - INFO: total_loss: 0.1055759341
+[2021-09-20 18:53:35,701] - [trainer.py file line:125] - INFO: epoch: 2	 batch: 20
+[2021-09-20 18:53:35,748] - [trainer.py file line:127] - INFO: rec_loss: 0.1107876301
+[2021-09-20 18:53:35,754] - [trainer.py file line:137] - INFO: per_loss: 0.0078618489
+[2021-09-20 18:53:35,756] - [trainer.py file line:146] - INFO: tpl_loss: 0.0024354588
+[2021-09-20 18:53:35,890] - [trainer.py file line:152] - INFO: adv_loss: 0.0000000000
+[2021-09-20 18:53:35,891] - [trainer.py file line:155] - INFO: total_loss: 0.1210849434
+[2021-09-20 18:53:36,185] - [trainer.py file line:161] - INFO: saving the model...
+[2021-09-20 18:53:38,549] - [trainer.py file line:169] - INFO: Epoch 2 evaluation process...
+[2021-09-20 18:53:41,518] - [trainer.py file line:312] - INFO: val_rec_loss: 0.1124331504
+[2021-09-20 18:53:41,520] - [trainer.py file line:313] - INFO: val_per_loss: 0.0086722290
+[2021-09-20 18:53:41,520] - [trainer.py file line:314] - INFO: val_tpl_loss: 0.0025029716
+[2021-09-20 18:53:41,520] - [trainer.py file line:315] - INFO: val_adv_loss: 0.0000000000
+[2021-09-20 18:53:41,520] - [trainer.py file line:316] - INFO: total_val_loss: 0.1236083508
+[2021-09-20 18:53:41,522] - [trainer.py file line:322] - INFO: saving the model...
+[2021-09-20 18:53:41,749] - [trainer.py file line:338] - INFO: saving the model...
+[2021-09-20 18:53:42,025] - [trainer.py file line:355] - INFO: saving the model...
+[2021-09-20 18:53:42,228] - [trainer.py file line:368] - INFO: Ref  PSNR (now): 24.262 	 SSIM (now): 0.4193
+[2021-09-20 18:53:42,228] - [trainer.py file line:375] - INFO: Ref  PSNR (max): 24.262 (2) 	 SSIM (max): 0.4193 (2)
+[2021-09-20 18:53:42,228] - [trainer.py file line:378] - INFO: Evaluation over.

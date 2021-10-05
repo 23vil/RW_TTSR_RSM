@@ -1,0 +1,10 @@
+[2021-09-21 21:14:27,934] - [trainer.py file line:76] - INFO: load_model_path: ./pretrainedModels/model_00001.pt
+[2021-09-21 21:14:28,009] - [trainer.py file line:170] - INFO: Epoch 0 evaluation process...
+[2021-09-21 21:15:05,774] - [trainer.py file line:332] - INFO: val_rec_loss: 0.0936752334
+[2021-09-21 21:15:05,775] - [trainer.py file line:333] - INFO: val_per_loss: 0.0044005169
+[2021-09-21 21:15:05,775] - [trainer.py file line:334] - INFO: val_tpl_loss: 0.0011345915
+[2021-09-21 21:15:05,776] - [trainer.py file line:335] - INFO: val_adv_loss: -0.0000328796
+[2021-09-21 21:15:05,776] - [trainer.py file line:336] - INFO: total_val_loss: 0.0991774574
+[2021-09-21 21:15:05,776] - [trainer.py file line:388] - INFO: Ref  PSNR (now): 25.726 	 SSIM (now): 0.4311
+[2021-09-21 21:15:05,776] - [trainer.py file line:395] - INFO: Ref  PSNR (max): 25.726 (0) 	 SSIM (max): 0.4311 (0)
+[2021-09-21 21:15:05,776] - [trainer.py file line:398] - INFO: Evaluation over.

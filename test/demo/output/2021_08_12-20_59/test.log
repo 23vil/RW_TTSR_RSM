@@ -1,0 +1,6 @@
+[2021-08-12 20:59:39,151] - [trainer.py file line:64] - INFO: load_model_path: ./pretrainedModels/best_model_psnr_20.pt
+[2021-08-12 20:59:39,235] - [trainer.py file line:272] - INFO: Test process...
+[2021-08-12 20:59:39,236] - [trainer.py file line:273] - INFO: lr path:     ./test/demo/lr/000013_10.tif
+[2021-08-12 20:59:39,236] - [trainer.py file line:274] - INFO: ref path:    ./test/demo/ref/6.tif
+[2021-08-12 20:59:39,429] - [trainer.py file line:320] - INFO: output path: ./test/demo/output/2021_08_12-20_59/save_results/000013_10.tif
+[2021-08-12 20:59:39,429] - [trainer.py file line:322] - INFO: Test over.

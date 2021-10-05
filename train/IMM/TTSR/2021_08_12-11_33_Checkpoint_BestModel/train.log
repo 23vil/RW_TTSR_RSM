@@ -1,0 +1,366 @@
+[2021-08-12 11:33:49,310] - [trainer.py file line:56] - INFO: load_model_path: ./pretrainedModels/Microtest_model2_00030.pt
+[2021-08-12 11:33:49,388] - [trainer.py file line:149] - INFO: Epoch 0 evaluation process...
+[2021-08-12 11:33:50,123] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0536591299
+[2021-08-12 11:33:50,123] - [trainer.py file line:196] - INFO: val_per_loss: 0.0006240841
+[2021-08-12 11:33:50,124] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0006534128
+[2021-08-12 11:33:50,124] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0034323104
+[2021-08-12 11:33:50,124] - [trainer.py file line:199] - INFO: total_val_loss: 0.0583689362
+[2021-08-12 11:33:50,124] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.292 	 SSIM (now): 0.4279
+[2021-08-12 11:33:50,124] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.292 (0) 	 SSIM (max): 0.4279 (0)
+[2021-08-12 11:33:50,124] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:33:50,125] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:33:51,792] - [trainer.py file line:108] - INFO: init epoch: 1	 batch: 5
+[2021-08-12 11:33:51,845] - [trainer.py file line:110] - INFO: rec_loss: 0.0663102269
+[2021-08-12 11:33:51,845] - [trainer.py file line:135] - INFO: total_loss: 0.0663102269
+[2021-08-12 11:33:52,524] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:33:54,357] - [trainer.py file line:108] - INFO: init epoch: 2	 batch: 5
+[2021-08-12 11:33:54,408] - [trainer.py file line:110] - INFO: rec_loss: 0.0604801029
+[2021-08-12 11:33:54,408] - [trainer.py file line:135] - INFO: total_loss: 0.0604801029
+[2021-08-12 11:33:55,100] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:33:56,923] - [trainer.py file line:108] - INFO: epoch: 1	 batch: 5
+[2021-08-12 11:33:56,976] - [trainer.py file line:110] - INFO: rec_loss: 0.0539157838
+[2021-08-12 11:33:56,980] - [trainer.py file line:120] - INFO: per_loss: 0.0009138570
+[2021-08-12 11:33:56,981] - [trainer.py file line:128] - INFO: tpl_loss: 0.0004323323
+[2021-08-12 11:33:56,997] - [trainer.py file line:133] - INFO: adv_loss: 0.0034018350
+[2021-08-12 11:33:56,997] - [trainer.py file line:135] - INFO: total_loss: 0.0586638078
+[2021-08-12 11:33:57,733] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:33:59,581] - [trainer.py file line:108] - INFO: epoch: 2	 batch: 5
+[2021-08-12 11:33:59,635] - [trainer.py file line:110] - INFO: rec_loss: 0.0428633839
+[2021-08-12 11:33:59,639] - [trainer.py file line:120] - INFO: per_loss: 0.0005580390
+[2021-08-12 11:33:59,640] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003492924
+[2021-08-12 11:33:59,656] - [trainer.py file line:133] - INFO: adv_loss: 0.0037662541
+[2021-08-12 11:33:59,657] - [trainer.py file line:135] - INFO: total_loss: 0.0475369655
+[2021-08-12 11:34:00,393] - [trainer.py file line:149] - INFO: Epoch 2 evaluation process...
+[2021-08-12 11:34:01,313] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0552718714
+[2021-08-12 11:34:01,313] - [trainer.py file line:196] - INFO: val_per_loss: 0.0009546440
+[2021-08-12 11:34:01,313] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0004719298
+[2021-08-12 11:34:01,313] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0023982865
+[2021-08-12 11:34:01,313] - [trainer.py file line:199] - INFO: total_val_loss: 0.0590967312
+[2021-08-12 11:34:01,314] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.748 	 SSIM (now): 0.4560
+[2021-08-12 11:34:01,314] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.748 (2) 	 SSIM (max): 0.4560 (2)
+[2021-08-12 11:34:01,314] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:01,316] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:02,957] - [trainer.py file line:108] - INFO: epoch: 3	 batch: 5
+[2021-08-12 11:34:03,010] - [trainer.py file line:110] - INFO: rec_loss: 0.0417066626
+[2021-08-12 11:34:03,014] - [trainer.py file line:120] - INFO: per_loss: 0.0004160494
+[2021-08-12 11:34:03,015] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003021757
+[2021-08-12 11:34:03,031] - [trainer.py file line:133] - INFO: adv_loss: 0.0064682481
+[2021-08-12 11:34:03,032] - [trainer.py file line:135] - INFO: total_loss: 0.0488931350
+[2021-08-12 11:34:03,770] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:05,513] - [trainer.py file line:108] - INFO: epoch: 4	 batch: 5
+[2021-08-12 11:34:05,566] - [trainer.py file line:110] - INFO: rec_loss: 0.0420432389
+[2021-08-12 11:34:05,569] - [trainer.py file line:120] - INFO: per_loss: 0.0004247947
+[2021-08-12 11:34:05,571] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002879561
+[2021-08-12 11:34:05,587] - [trainer.py file line:133] - INFO: adv_loss: 0.0008589125
+[2021-08-12 11:34:05,587] - [trainer.py file line:135] - INFO: total_loss: 0.0436149053
+[2021-08-12 11:34:06,323] - [trainer.py file line:149] - INFO: Epoch 4 evaluation process...
+[2021-08-12 11:34:07,189] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0539498888
+[2021-08-12 11:34:07,190] - [trainer.py file line:196] - INFO: val_per_loss: 0.0008923117
+[2021-08-12 11:34:07,191] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0004506584
+[2021-08-12 11:34:07,191] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0022263904
+[2021-08-12 11:34:07,191] - [trainer.py file line:199] - INFO: total_val_loss: 0.0575192496
+[2021-08-12 11:34:07,191] - [trainer.py file line:206] - INFO: saving the model...
+[2021-08-12 11:34:07,419] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.989 	 SSIM (now): 0.4584
+[2021-08-12 11:34:07,419] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4584 (4)
+[2021-08-12 11:34:07,419] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:07,422] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:09,643] - [trainer.py file line:108] - INFO: epoch: 5	 batch: 5
+[2021-08-12 11:34:09,656] - [trainer.py file line:110] - INFO: rec_loss: 0.0439263210
+[2021-08-12 11:34:09,663] - [trainer.py file line:120] - INFO: per_loss: 0.0005599753
+[2021-08-12 11:34:09,666] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003249303
+[2021-08-12 11:34:09,697] - [trainer.py file line:133] - INFO: adv_loss: 0.0087417122
+[2021-08-12 11:34:09,697] - [trainer.py file line:135] - INFO: total_loss: 0.0535529405
+[2021-08-12 11:34:10,414] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:12,109] - [trainer.py file line:108] - INFO: epoch: 6	 batch: 5
+[2021-08-12 11:34:12,127] - [trainer.py file line:110] - INFO: rec_loss: 0.0417641699
+[2021-08-12 11:34:12,135] - [trainer.py file line:120] - INFO: per_loss: 0.0006049038
+[2021-08-12 11:34:12,139] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002852584
+[2021-08-12 11:34:12,169] - [trainer.py file line:133] - INFO: adv_loss: 0.0141228931
+[2021-08-12 11:34:12,169] - [trainer.py file line:135] - INFO: total_loss: 0.0567772239
+[2021-08-12 11:34:12,910] - [trainer.py file line:149] - INFO: Epoch 6 evaluation process...
+[2021-08-12 11:34:13,599] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0567020178
+[2021-08-12 11:34:13,599] - [trainer.py file line:196] - INFO: val_per_loss: 0.0009217073
+[2021-08-12 11:34:13,600] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0004502009
+[2021-08-12 11:34:13,600] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0007164017
+[2021-08-12 11:34:13,600] - [trainer.py file line:199] - INFO: total_val_loss: 0.0587903298
+[2021-08-12 11:34:13,600] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.222 	 SSIM (now): 0.4587
+[2021-08-12 11:34:13,600] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:34:13,600] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:13,601] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:15,316] - [trainer.py file line:108] - INFO: epoch: 7	 batch: 5
+[2021-08-12 11:34:15,369] - [trainer.py file line:110] - INFO: rec_loss: 0.0491061434
+[2021-08-12 11:34:15,373] - [trainer.py file line:120] - INFO: per_loss: 0.0006532150
+[2021-08-12 11:34:15,374] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003035191
+[2021-08-12 11:34:15,391] - [trainer.py file line:133] - INFO: adv_loss: 0.0124299070
+[2021-08-12 11:34:15,391] - [trainer.py file line:135] - INFO: total_loss: 0.0624927841
+[2021-08-12 11:34:16,123] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:17,871] - [trainer.py file line:108] - INFO: epoch: 8	 batch: 5
+[2021-08-12 11:34:17,923] - [trainer.py file line:110] - INFO: rec_loss: 0.0503341779
+[2021-08-12 11:34:17,927] - [trainer.py file line:120] - INFO: per_loss: 0.0007066256
+[2021-08-12 11:34:17,928] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003038653
+[2021-08-12 11:34:17,945] - [trainer.py file line:133] - INFO: adv_loss: 0.0048727770
+[2021-08-12 11:34:17,945] - [trainer.py file line:135] - INFO: total_loss: 0.0562174432
+[2021-08-12 11:34:18,678] - [trainer.py file line:149] - INFO: Epoch 8 evaluation process...
+[2021-08-12 11:34:19,461] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0594228283
+[2021-08-12 11:34:19,462] - [trainer.py file line:196] - INFO: val_per_loss: 0.0010232730
+[2021-08-12 11:34:19,462] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0003728818
+[2021-08-12 11:34:19,462] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0012565329
+[2021-08-12 11:34:19,462] - [trainer.py file line:199] - INFO: total_val_loss: 0.0620755181
+[2021-08-12 11:34:19,463] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.344 	 SSIM (now): 0.4352
+[2021-08-12 11:34:19,463] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:34:19,463] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:19,468] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:21,350] - [trainer.py file line:108] - INFO: epoch: 9	 batch: 5
+[2021-08-12 11:34:21,404] - [trainer.py file line:110] - INFO: rec_loss: 0.0499820523
+[2021-08-12 11:34:21,408] - [trainer.py file line:120] - INFO: per_loss: 0.0008171168
+[2021-08-12 11:34:21,410] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003175527
+[2021-08-12 11:34:21,427] - [trainer.py file line:133] - INFO: adv_loss: 0.0103181433
+[2021-08-12 11:34:21,427] - [trainer.py file line:135] - INFO: total_loss: 0.0614348650
+[2021-08-12 11:34:22,157] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:24,256] - [trainer.py file line:108] - INFO: epoch: 10	 batch: 5
+[2021-08-12 11:34:24,309] - [trainer.py file line:110] - INFO: rec_loss: 0.0552624278
+[2021-08-12 11:34:24,322] - [trainer.py file line:120] - INFO: per_loss: 0.0010131445
+[2021-08-12 11:34:24,326] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003529255
+[2021-08-12 11:34:24,345] - [trainer.py file line:133] - INFO: adv_loss: 0.0115735214
+[2021-08-12 11:34:24,345] - [trainer.py file line:135] - INFO: total_loss: 0.0682020187
+[2021-08-12 11:34:25,244] - [trainer.py file line:149] - INFO: Epoch 10 evaluation process...
+[2021-08-12 11:34:25,973] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0550025292
+[2021-08-12 11:34:25,974] - [trainer.py file line:196] - INFO: val_per_loss: 0.0011041716
+[2021-08-12 11:34:25,974] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0003694409
+[2021-08-12 11:34:25,974] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0010359623
+[2021-08-12 11:34:25,974] - [trainer.py file line:199] - INFO: total_val_loss: 0.0575121045
+[2021-08-12 11:34:25,974] - [trainer.py file line:206] - INFO: saving the model...
+[2021-08-12 11:34:26,153] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.669 	 SSIM (now): 0.4414
+[2021-08-12 11:34:26,153] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:34:26,153] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:26,155] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:27,885] - [trainer.py file line:108] - INFO: epoch: 11	 batch: 5
+[2021-08-12 11:34:27,938] - [trainer.py file line:110] - INFO: rec_loss: 0.0453861579
+[2021-08-12 11:34:27,942] - [trainer.py file line:120] - INFO: per_loss: 0.0006633453
+[2021-08-12 11:34:27,943] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002839701
+[2021-08-12 11:34:27,960] - [trainer.py file line:133] - INFO: adv_loss: 0.0214069933
+[2021-08-12 11:34:27,960] - [trainer.py file line:135] - INFO: total_loss: 0.0677404702
+[2021-08-12 11:34:28,683] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:30,537] - [trainer.py file line:108] - INFO: epoch: 12	 batch: 5
+[2021-08-12 11:34:30,590] - [trainer.py file line:110] - INFO: rec_loss: 0.0474654064
+[2021-08-12 11:34:30,594] - [trainer.py file line:120] - INFO: per_loss: 0.0007815119
+[2021-08-12 11:34:30,595] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002960659
+[2021-08-12 11:34:30,612] - [trainer.py file line:133] - INFO: adv_loss: 0.0030801289
+[2021-08-12 11:34:30,612] - [trainer.py file line:135] - INFO: total_loss: 0.0516231172
+[2021-08-12 11:34:31,344] - [trainer.py file line:149] - INFO: Epoch 12 evaluation process...
+[2021-08-12 11:34:32,174] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0560322963
+[2021-08-12 11:34:32,175] - [trainer.py file line:196] - INFO: val_per_loss: 0.0009730728
+[2021-08-12 11:34:32,175] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0003363266
+[2021-08-12 11:34:32,175] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0140995756
+[2021-08-12 11:34:32,175] - [trainer.py file line:199] - INFO: total_val_loss: 0.0714412704
+[2021-08-12 11:34:32,175] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.516 	 SSIM (now): 0.4476
+[2021-08-12 11:34:32,175] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:34:32,175] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:32,176] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:33,807] - [trainer.py file line:108] - INFO: epoch: 13	 batch: 5
+[2021-08-12 11:34:33,861] - [trainer.py file line:110] - INFO: rec_loss: 0.0448135957
+[2021-08-12 11:34:33,864] - [trainer.py file line:120] - INFO: per_loss: 0.0007205086
+[2021-08-12 11:34:33,866] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002417838
+[2021-08-12 11:34:33,882] - [trainer.py file line:133] - INFO: adv_loss: 0.0084366556
+[2021-08-12 11:34:33,882] - [trainer.py file line:135] - INFO: total_loss: 0.0542125404
+[2021-08-12 11:34:34,608] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:36,199] - [trainer.py file line:108] - INFO: epoch: 14	 batch: 5
+[2021-08-12 11:34:36,253] - [trainer.py file line:110] - INFO: rec_loss: 0.0524808168
+[2021-08-12 11:34:36,256] - [trainer.py file line:120] - INFO: per_loss: 0.0008297753
+[2021-08-12 11:34:36,258] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002720291
+[2021-08-12 11:34:36,275] - [trainer.py file line:133] - INFO: adv_loss: 0.0095899468
+[2021-08-12 11:34:36,275] - [trainer.py file line:135] - INFO: total_loss: 0.0631725639
+[2021-08-12 11:34:36,998] - [trainer.py file line:149] - INFO: Epoch 14 evaluation process...
+[2021-08-12 11:34:37,767] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0565525182
+[2021-08-12 11:34:37,767] - [trainer.py file line:196] - INFO: val_per_loss: 0.0013129540
+[2021-08-12 11:34:37,767] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0003175318
+[2021-08-12 11:34:37,767] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0017876131
+[2021-08-12 11:34:37,768] - [trainer.py file line:199] - INFO: total_val_loss: 0.0599706173
+[2021-08-12 11:34:37,768] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.252 	 SSIM (now): 0.4246
+[2021-08-12 11:34:37,768] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:34:37,768] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:37,769] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:39,652] - [trainer.py file line:108] - INFO: epoch: 15	 batch: 5
+[2021-08-12 11:34:39,655] - [trainer.py file line:110] - INFO: rec_loss: 0.0604729764
+[2021-08-12 11:34:39,658] - [trainer.py file line:120] - INFO: per_loss: 0.0010611520
+[2021-08-12 11:34:39,660] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003846702
+[2021-08-12 11:34:39,676] - [trainer.py file line:133] - INFO: adv_loss: 0.0033750380
+[2021-08-12 11:34:39,676] - [trainer.py file line:135] - INFO: total_loss: 0.0652938336
+[2021-08-12 11:34:40,400] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:42,242] - [trainer.py file line:108] - INFO: epoch: 16	 batch: 5
+[2021-08-12 11:34:42,295] - [trainer.py file line:110] - INFO: rec_loss: 0.0574968122
+[2021-08-12 11:34:42,299] - [trainer.py file line:120] - INFO: per_loss: 0.0009740856
+[2021-08-12 11:34:42,301] - [trainer.py file line:128] - INFO: tpl_loss: 0.0004070721
+[2021-08-12 11:34:42,317] - [trainer.py file line:133] - INFO: adv_loss: 0.0036282982
+[2021-08-12 11:34:42,318] - [trainer.py file line:135] - INFO: total_loss: 0.0625062659
+[2021-08-12 11:34:43,056] - [trainer.py file line:149] - INFO: Epoch 16 evaluation process...
+[2021-08-12 11:34:43,957] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0603737533
+[2021-08-12 11:34:43,957] - [trainer.py file line:196] - INFO: val_per_loss: 0.0015536797
+[2021-08-12 11:34:43,957] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0004358846
+[2021-08-12 11:34:43,957] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0015720992
+[2021-08-12 11:34:43,957] - [trainer.py file line:199] - INFO: total_val_loss: 0.0639354214
+[2021-08-12 11:34:43,957] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 23.406 	 SSIM (now): 0.3765
+[2021-08-12 11:34:43,957] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:34:43,957] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:43,959] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:45,741] - [trainer.py file line:108] - INFO: epoch: 17	 batch: 5
+[2021-08-12 11:34:45,795] - [trainer.py file line:110] - INFO: rec_loss: 0.0496904366
+[2021-08-12 11:34:45,798] - [trainer.py file line:120] - INFO: per_loss: 0.0008744329
+[2021-08-12 11:34:45,800] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002767326
+[2021-08-12 11:34:45,817] - [trainer.py file line:133] - INFO: adv_loss: 0.0190248992
+[2021-08-12 11:34:45,817] - [trainer.py file line:135] - INFO: total_loss: 0.0698665008
+[2021-08-12 11:34:46,546] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:48,762] - [trainer.py file line:108] - INFO: epoch: 18	 batch: 5
+[2021-08-12 11:34:48,764] - [trainer.py file line:110] - INFO: rec_loss: 0.0483869128
+[2021-08-12 11:34:48,768] - [trainer.py file line:120] - INFO: per_loss: 0.0007234474
+[2021-08-12 11:34:48,770] - [trainer.py file line:128] - INFO: tpl_loss: 0.0001900360
+[2021-08-12 11:34:48,786] - [trainer.py file line:133] - INFO: adv_loss: 0.0029381323
+[2021-08-12 11:34:48,786] - [trainer.py file line:135] - INFO: total_loss: 0.0522385277
+[2021-08-12 11:34:49,506] - [trainer.py file line:149] - INFO: Epoch 18 evaluation process...
+[2021-08-12 11:34:50,269] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0560817383
+[2021-08-12 11:34:50,269] - [trainer.py file line:196] - INFO: val_per_loss: 0.0010800612
+[2021-08-12 11:34:50,269] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0002790373
+[2021-08-12 11:34:50,269] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0020843046
+[2021-08-12 11:34:50,269] - [trainer.py file line:199] - INFO: total_val_loss: 0.0595251434
+[2021-08-12 11:34:50,269] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.551 	 SSIM (now): 0.4560
+[2021-08-12 11:34:50,270] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:34:50,270] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:50,271] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:52,010] - [trainer.py file line:108] - INFO: epoch: 19	 batch: 5
+[2021-08-12 11:34:52,062] - [trainer.py file line:110] - INFO: rec_loss: 0.0447798148
+[2021-08-12 11:34:52,065] - [trainer.py file line:120] - INFO: per_loss: 0.0007125866
+[2021-08-12 11:34:52,067] - [trainer.py file line:128] - INFO: tpl_loss: 0.0001864561
+[2021-08-12 11:34:52,083] - [trainer.py file line:133] - INFO: adv_loss: 0.0299188457
+[2021-08-12 11:34:52,083] - [trainer.py file line:135] - INFO: total_loss: 0.0755977035
+[2021-08-12 11:34:52,805] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:54,401] - [trainer.py file line:108] - INFO: epoch: 20	 batch: 5
+[2021-08-12 11:34:54,454] - [trainer.py file line:110] - INFO: rec_loss: 0.0451746807
+[2021-08-12 11:34:54,458] - [trainer.py file line:120] - INFO: per_loss: 0.0006321978
+[2021-08-12 11:34:54,459] - [trainer.py file line:128] - INFO: tpl_loss: 0.0001439314
+[2021-08-12 11:34:54,476] - [trainer.py file line:133] - INFO: adv_loss: 0.0040333886
+[2021-08-12 11:34:54,476] - [trainer.py file line:135] - INFO: total_loss: 0.0499841943
+[2021-08-12 11:34:55,352] - [trainer.py file line:149] - INFO: Epoch 20 evaluation process...
+[2021-08-12 11:34:56,151] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0574729815
+[2021-08-12 11:34:56,151] - [trainer.py file line:196] - INFO: val_per_loss: 0.0010029697
+[2021-08-12 11:34:56,151] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0002282016
+[2021-08-12 11:34:56,151] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0018016644
+[2021-08-12 11:34:56,151] - [trainer.py file line:199] - INFO: total_val_loss: 0.0605058186
+[2021-08-12 11:34:56,152] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.203 	 SSIM (now): 0.4528
+[2021-08-12 11:34:56,152] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:34:56,152] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:34:56,153] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:34:57,808] - [trainer.py file line:108] - INFO: epoch: 21	 batch: 5
+[2021-08-12 11:34:57,858] - [trainer.py file line:110] - INFO: rec_loss: 0.0495130643
+[2021-08-12 11:34:57,863] - [trainer.py file line:120] - INFO: per_loss: 0.0007085140
+[2021-08-12 11:34:57,865] - [trainer.py file line:128] - INFO: tpl_loss: 0.0001379199
+[2021-08-12 11:34:57,883] - [trainer.py file line:133] - INFO: adv_loss: 0.0096983742
+[2021-08-12 11:34:57,883] - [trainer.py file line:135] - INFO: total_loss: 0.0600578710
+[2021-08-12 11:34:58,632] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:00,287] - [trainer.py file line:108] - INFO: epoch: 22	 batch: 5
+[2021-08-12 11:35:00,339] - [trainer.py file line:110] - INFO: rec_loss: 0.0572291017
+[2021-08-12 11:35:00,343] - [trainer.py file line:120] - INFO: per_loss: 0.0010566402
+[2021-08-12 11:35:00,344] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002481118
+[2021-08-12 11:35:00,361] - [trainer.py file line:133] - INFO: adv_loss: 0.0038131827
+[2021-08-12 11:35:00,361] - [trainer.py file line:135] - INFO: total_loss: 0.0623470359
+[2021-08-12 11:35:01,231] - [trainer.py file line:149] - INFO: Epoch 22 evaluation process...
+[2021-08-12 11:35:02,090] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0570202842
+[2021-08-12 11:35:02,090] - [trainer.py file line:196] - INFO: val_per_loss: 0.0011179419
+[2021-08-12 11:35:02,090] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0002373666
+[2021-08-12 11:35:02,090] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0023053610
+[2021-08-12 11:35:02,090] - [trainer.py file line:199] - INFO: total_val_loss: 0.0606809556
+[2021-08-12 11:35:02,090] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.374 	 SSIM (now): 0.4074
+[2021-08-12 11:35:02,090] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:35:02,090] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:35:02,092] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:04,064] - [trainer.py file line:108] - INFO: epoch: 23	 batch: 5
+[2021-08-12 11:35:04,076] - [trainer.py file line:110] - INFO: rec_loss: 0.0500756726
+[2021-08-12 11:35:04,083] - [trainer.py file line:120] - INFO: per_loss: 0.0008683543
+[2021-08-12 11:35:04,087] - [trainer.py file line:128] - INFO: tpl_loss: 0.0001648946
+[2021-08-12 11:35:04,119] - [trainer.py file line:133] - INFO: adv_loss: 0.0040076757
+[2021-08-12 11:35:04,119] - [trainer.py file line:135] - INFO: total_loss: 0.0551165976
+[2021-08-12 11:35:04,897] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:06,595] - [trainer.py file line:108] - INFO: epoch: 24	 batch: 5
+[2021-08-12 11:35:06,647] - [trainer.py file line:110] - INFO: rec_loss: 0.0553819351
+[2021-08-12 11:35:06,651] - [trainer.py file line:120] - INFO: per_loss: 0.0007601313
+[2021-08-12 11:35:06,652] - [trainer.py file line:128] - INFO: tpl_loss: 0.0002281325
+[2021-08-12 11:35:06,669] - [trainer.py file line:133] - INFO: adv_loss: 0.0015332239
+[2021-08-12 11:35:06,669] - [trainer.py file line:135] - INFO: total_loss: 0.0579034239
+[2021-08-12 11:35:07,617] - [trainer.py file line:149] - INFO: Epoch 24 evaluation process...
+[2021-08-12 11:35:08,342] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0602594391
+[2021-08-12 11:35:08,342] - [trainer.py file line:196] - INFO: val_per_loss: 0.0014630087
+[2021-08-12 11:35:08,342] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0002916561
+[2021-08-12 11:35:08,342] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0074341493
+[2021-08-12 11:35:08,342] - [trainer.py file line:199] - INFO: total_val_loss: 0.0694482550
+[2021-08-12 11:35:08,343] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 23.534 	 SSIM (now): 0.3481
+[2021-08-12 11:35:08,343] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:35:08,343] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:35:08,344] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:10,383] - [trainer.py file line:108] - INFO: epoch: 25	 batch: 5
+[2021-08-12 11:35:10,436] - [trainer.py file line:110] - INFO: rec_loss: 0.0622696392
+[2021-08-12 11:35:10,440] - [trainer.py file line:120] - INFO: per_loss: 0.0010056227
+[2021-08-12 11:35:10,441] - [trainer.py file line:128] - INFO: tpl_loss: 0.0003268523
+[2021-08-12 11:35:10,458] - [trainer.py file line:133] - INFO: adv_loss: 0.0121665904
+[2021-08-12 11:35:10,458] - [trainer.py file line:135] - INFO: total_loss: 0.0757687017
+[2021-08-12 11:35:11,399] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:13,480] - [trainer.py file line:108] - INFO: epoch: 26	 batch: 5
+[2021-08-12 11:35:13,484] - [trainer.py file line:110] - INFO: rec_loss: 0.0747182369
+[2021-08-12 11:35:13,497] - [trainer.py file line:120] - INFO: per_loss: 0.0010628724
+[2021-08-12 11:35:13,504] - [trainer.py file line:128] - INFO: tpl_loss: 0.0004234901
+[2021-08-12 11:35:13,552] - [trainer.py file line:133] - INFO: adv_loss: 0.0063453708
+[2021-08-12 11:35:13,553] - [trainer.py file line:135] - INFO: total_loss: 0.0825499669
+[2021-08-12 11:35:14,473] - [trainer.py file line:149] - INFO: Epoch 26 evaluation process...
+[2021-08-12 11:35:15,177] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0647684559
+[2021-08-12 11:35:15,178] - [trainer.py file line:196] - INFO: val_per_loss: 0.0018012573
+[2021-08-12 11:35:15,178] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0004030700
+[2021-08-12 11:35:15,178] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0009410577
+[2021-08-12 11:35:15,179] - [trainer.py file line:199] - INFO: total_val_loss: 0.0679138452
+[2021-08-12 11:35:15,179] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 22.863 	 SSIM (now): 0.3317
+[2021-08-12 11:35:15,179] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:35:15,179] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:35:15,180] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:16,826] - [trainer.py file line:108] - INFO: epoch: 27	 batch: 5
+[2021-08-12 11:35:16,880] - [trainer.py file line:110] - INFO: rec_loss: 0.0510135517
+[2021-08-12 11:35:16,884] - [trainer.py file line:120] - INFO: per_loss: 0.0008428526
+[2021-08-12 11:35:16,885] - [trainer.py file line:128] - INFO: tpl_loss: 0.0001859073
+[2021-08-12 11:35:16,902] - [trainer.py file line:133] - INFO: adv_loss: 0.0189623442
+[2021-08-12 11:35:16,902] - [trainer.py file line:135] - INFO: total_loss: 0.0710046589
+[2021-08-12 11:35:17,814] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:19,765] - [trainer.py file line:108] - INFO: epoch: 28	 batch: 5
+[2021-08-12 11:35:19,804] - [trainer.py file line:110] - INFO: rec_loss: 0.0498323143
+[2021-08-12 11:35:19,817] - [trainer.py file line:120] - INFO: per_loss: 0.0005941879
+[2021-08-12 11:35:19,823] - [trainer.py file line:128] - INFO: tpl_loss: 0.0001538206
+[2021-08-12 11:35:19,867] - [trainer.py file line:133] - INFO: adv_loss: 0.0000000000
+[2021-08-12 11:35:19,868] - [trainer.py file line:135] - INFO: total_loss: 0.0505803227
+[2021-08-12 11:35:20,842] - [trainer.py file line:149] - INFO: Epoch 28 evaluation process...
+[2021-08-12 11:35:22,001] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0599346347
+[2021-08-12 11:35:22,001] - [trainer.py file line:196] - INFO: val_per_loss: 0.0011464474
+[2021-08-12 11:35:22,001] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0002304023
+[2021-08-12 11:35:22,001] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0000000000
+[2021-08-12 11:35:22,001] - [trainer.py file line:199] - INFO: total_val_loss: 0.0613114834
+[2021-08-12 11:35:22,001] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.492 	 SSIM (now): 0.4018
+[2021-08-12 11:35:22,001] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:35:22,001] - [trainer.py file line:227] - INFO: Evaluation over.
+[2021-08-12 11:35:22,003] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:24,093] - [trainer.py file line:108] - INFO: epoch: 29	 batch: 5
+[2021-08-12 11:35:24,146] - [trainer.py file line:110] - INFO: rec_loss: 0.0505739525
+[2021-08-12 11:35:24,150] - [trainer.py file line:120] - INFO: per_loss: 0.0009909210
+[2021-08-12 11:35:24,151] - [trainer.py file line:128] - INFO: tpl_loss: 0.0001518462
+[2021-08-12 11:35:24,176] - [trainer.py file line:133] - INFO: adv_loss: 0.0174104087
+[2021-08-12 11:35:24,176] - [trainer.py file line:135] - INFO: total_loss: 0.0691271275
+[2021-08-12 11:35:24,918] - [trainer.py file line:73] - INFO: Current epoch learning rate: 1.000000e-04
+[2021-08-12 11:35:27,117] - [trainer.py file line:108] - INFO: epoch: 30	 batch: 5
+[2021-08-12 11:35:27,135] - [trainer.py file line:110] - INFO: rec_loss: 0.0569579676
+[2021-08-12 11:35:27,141] - [trainer.py file line:120] - INFO: per_loss: 0.0006729936
+[2021-08-12 11:35:27,144] - [trainer.py file line:128] - INFO: tpl_loss: 0.0004592417
+[2021-08-12 11:35:27,184] - [trainer.py file line:133] - INFO: adv_loss: 0.0055592256
+[2021-08-12 11:35:27,185] - [trainer.py file line:135] - INFO: total_loss: 0.0636494309
+[2021-08-12 11:35:28,047] - [trainer.py file line:141] - INFO: saving the model...
+[2021-08-12 11:35:28,174] - [trainer.py file line:149] - INFO: Epoch 30 evaluation process...
+[2021-08-12 11:35:28,908] - [trainer.py file line:195] - INFO: val_rec_loss: 0.0580767095
+[2021-08-12 11:35:28,909] - [trainer.py file line:196] - INFO: val_per_loss: 0.0011402506
+[2021-08-12 11:35:28,909] - [trainer.py file line:197] - INFO: val_tpl_loss: 0.0002842152
+[2021-08-12 11:35:28,909] - [trainer.py file line:198] - INFO: val_adv_loss: 0.0032189090
+[2021-08-12 11:35:28,909] - [trainer.py file line:199] - INFO: total_val_loss: 0.0627200827
+[2021-08-12 11:35:28,909] - [trainer.py file line:217] - INFO: Ref  PSNR (now): 24.169 	 SSIM (now): 0.3721
+[2021-08-12 11:35:28,909] - [trainer.py file line:224] - INFO: Ref  PSNR (max): 24.989 (4) 	 SSIM (max): 0.4587 (6)
+[2021-08-12 11:35:28,909] - [trainer.py file line:227] - INFO: Evaluation over.
