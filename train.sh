@@ -31,7 +31,7 @@ python main.py --save_dir ./train/IMM/TTSR/$save_folder/ \
                --GAN_type GAN \
                --train_crop_size 32 \
                --debug True\
-               --refTrain False\
+               --refTrain True\
                --retrain False \
                --model_path ./pretrainedModels/model_00001.pt
 #               --dataset_dir /home/ps815691/datasets/32-128_1024-4096_SSIMTreshold0-1 \

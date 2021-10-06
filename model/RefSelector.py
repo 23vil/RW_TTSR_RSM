@@ -3,7 +3,7 @@ import torch.nn as nn
 import torchvision.models as models
 
 class RefSelector(nn.Module):
-    def _init_(self, args):
+    def __init__(self, args):
         super(refSelector, self).__init__()
         self.args = args
         self.noRef = args.NumberRef
