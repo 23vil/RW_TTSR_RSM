@@ -463,10 +463,11 @@ class Trainer():
     def refTrain(self, current_epoch=0, is_init=False):
         
         self.RefSelModel.train() 
-        
+        print('yes')
             
         for i_batch, sample_batched in enumerate(self.dataloader['train']):
-
+            
+            
             self.optimizer.zero_grad()
 
             sample_batched = self.prepare(sample_batched) #Batch is sent to GPU
@@ -475,7 +476,8 @@ class Trainer():
             lr_sr = sample_batched['LR_sr']
             ref = sample_batched['Ref']
             ref_sr = sample_batched['Ref_sr']
-
+            refID = self.RefSelModel(lr)
+            print(refID)
             sr, S, T_lv3, T_lv2, T_lv1 = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr) #Here the models output for the inputs (arguments) is requested. (forward pass)
             if (self.args.gray_transform):
                 sr = self.transformGray(sr)
