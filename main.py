@@ -45,9 +45,9 @@ if __name__ == '__main__':
     _loss_all = get_loss_dict(args, _logger) #defined in loss/loss.pt
     ### trainer
     if args.refTrain:
-        t = Trainer(args, _logger, _dataloader, _model, _RefSelModel, _loss_all)
+        t = Trainer(args, _logger, _dataloader, _RefSelModel, _model, _loss_all)
     else:
-        t = Trainer(args, _logger, _dataloader, _model, _loss_all)
+        t = Trainer(args, _logger, _dataloader, None, _model, _loss_all)
 
     ### test / eval / train
     if (args.test):

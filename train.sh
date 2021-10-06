@@ -30,10 +30,10 @@ python main.py --save_dir ./train/IMM/TTSR/$save_folder/ \
                --gray_transform True \
                --GAN_type GAN \
                --train_crop_size 32 \
-               --retrain False \
                --debug True\
-               --refTrain True\
-               --model_path ./pretrainedModels/model_00030.pt
+               --refTrain False\
+               --retrain False \
+               --model_path ./pretrainedModels/model_00001.pt
 #               --dataset_dir /home/ps815691/datasets/32-128_1024-4096_SSIMTreshold0-1 \
 # /home/ps815691/git/TTSR/dataset/IMMRW_64_256
 # ### training TTSR-rec

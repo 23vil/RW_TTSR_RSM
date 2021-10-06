@@ -25,7 +25,7 @@ import time
 
 
 class Trainer():
-    def __init__(self, args, logger, dataloader, model, loss_all):
+    def __init__(self, args, logger, dataloader, RefSelModel, model, loss_all):
         self.args = args
         self.logger = logger
         self.dataloader = dataloader
