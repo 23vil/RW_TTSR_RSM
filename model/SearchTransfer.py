@@ -25,12 +25,12 @@ class SearchTransfer(nn.Module):
         refsr_lv3_unfold = F.unfold(refsr_lv3, kernel_size=(3, 3), padding=1)
         refsr_lv3_unfold = refsr_lv3_unfold.permute(0, 2, 1)
 
-        refsr_lv3_unfold = F.normalize(refsr_lv3_unfold, dim=2) # [N, Hr*Wr, C*k*k]
+        refsr_lv3_unfold = F.normalize(refsr_lv3_unfold, dim=2) # [N, Hr*Wr, C*k*k] #N = Batchsize
         lrsr_lv3_unfold  = F.normalize(lrsr_lv3_unfold, dim=1) # [N, C*k*k, H*W]
 
         R_lv3 = torch.bmm(refsr_lv3_unfold, lrsr_lv3_unfold) #[N, Hr*Wr, H*W] #batch matrix multiplication --> refsr*lrsr  ("Relevance Embedding" in Graph)
-        R_lv3_star, R_lv3_star_arg = torch.max(R_lv3, dim=1) #[N, H*W] R_lv3_star are the maximum values.......R_lv3_star_arg are indices at maximum values 
-
+        R_lv3_star, R_lv3_star_arg = torch.max(R_lv3, dim=1) #[N, Height*Width] R_lv3_star are the maximum values.......R_lv3_star_arg are indices at maximum values 
+        
         ### transfer
         ref_lv3_unfold = F.unfold(ref_lv3, kernel_size=(3, 3), padding=1)
         ref_lv2_unfold = F.unfold(ref_lv2, kernel_size=(6, 6), padding=2, stride=2)
@@ -44,6 +44,6 @@ class SearchTransfer(nn.Module):
         T_lv2 = F.fold(T_lv2_unfold, output_size=(lrsr_lv3.size(2)*2, lrsr_lv3.size(3)*2), kernel_size=(6,6), padding=2, stride=2) / (3.*3.)
         T_lv1 = F.fold(T_lv1_unfold, output_size=(lrsr_lv3.size(2)*4, lrsr_lv3.size(3)*4), kernel_size=(12,12), padding=4, stride=4) / (3.*3.)
 
-        S = R_lv3_star.view(R_lv3_star.size(0), 1, lrsr_lv3.size(2), lrsr_lv3.size(3))
+        S = R_lv3_star.view(R_lv3_star.size(0), 1, lrsr_lv3.size(2), lrsr_lv3.size(3))  #[N, Depth, Heigth, Width)
 
-        return S, T_lv3, T_lv2, T_lv1
+        return S, T_lv3, T_lv2, T_lv1, R_lv3_star

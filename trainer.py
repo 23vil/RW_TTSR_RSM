@@ -463,7 +463,6 @@ class Trainer():
     def refTrain(self, current_epoch=0, is_init=False):
         
         self.RefSelModel.train() 
-        print('yes')
             
         for i_batch, sample_batched in enumerate(self.dataloader['train']):
             
@@ -477,67 +476,32 @@ class Trainer():
             ref = sample_batched['Ref']
             ref_sr = sample_batched['Ref_sr']
             refID = self.RefSelModel(lr)
-            print(refID)
-            sr, S, T_lv3, T_lv2, T_lv1 = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr) #Here the models output for the inputs (arguments) is requested. (forward pass)
-            if (self.args.gray_transform):
-                sr = self.transformGray(sr)
+            RelevanceTensor = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr) #Here the models output for the inputs (arguments) is requested. (forward pass)
+            print(RelevanceTensor)
+            print(torch.mean(RelevanceTensor, dim=1))
+            RSM_loss = torch.tensor([1.,0.5,0.4,0.2])
+            RSM_loss = 1/RSM_loss
+            RSM_loss = torch.sum(RSM_loss.detach())
+            RSM_loss.requires_grad = True
+            
+            rsmLoss.backward()
+            self.RefOptimizer.step()
+            #self.RefScheduler
+            
+            #if (self.args.gray_transform):
+            #    sr = self.transformGray(sr)
             #Check if images are ba any means correct-- not rotated or anything similar
-            sr_save = (sr.detach()+1.) * 127.5
-            hr_save = (hr.detach()+1.) * 127.5
-            millis = int(time.time()*10000)
+            #millis = int(time.time()*10000)
             #hr_save = np.transpose(hr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8) # squeeze delets all 1 values --- round() rounds to closest integer -- .cpu() moves object to cpu ---.numpy transforms object to numpy array--- transform to np.unit8 type
             #imsave(os.path.join(self.args.save_dir, str(millis)+'hr.tif'), hr_save)
             #sr_save = np.transpose(sr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8) # squeeze delets all 1 values --- round() rounds to closest integer -- .cpu() moves object to cpu ---.numpy transforms object to numpy array--- transform to np.unit8 type
             #imsave(os.path.join(self.args.save_dir, str(millis)+'.tif'), sr_save)
             
             ### calc loss
-            is_print = ((i_batch + 1) % self.args.print_every == 0) ### flag of print # only print if the batch index is dividable by "print_every"
+            #is_print = ((i_batch + 1) % self.args.print_every == 0) ### flag of print # only print if the batch index is dividable by "print_every"
                 
-            rec_loss = self.args.rec_w * self.loss_all['rec_loss'](sr, hr) #rec_w = weight of reconstruction loss - defined in train.sh (also default value in option.py) ---- loss_all defined in loss/loss.pt by "get_loss_dict" - change variable name in main.py
-            loss = rec_loss
-            if (is_print):
-                self.logger.info( ('init ' if is_init else '') + 'epoch: ' + str(current_epoch) + 
-                    '\t batch: ' + str(i_batch+1) )
-                self.logger.info( 'rec_loss: %.10f' %(rec_loss.item()) )
-                self.RecLossPlotter.store([current_epoch,i_batch, rec_loss.item()])
-            if (not is_init):
-                if ('per_loss' in self.loss_all):
-                    sr_relu5_1 = self.vgg19((sr + 1.) / 2.)
-                    with torch.no_grad():
-                        hr_relu5_1 = self.vgg19((hr.detach() + 1.) / 2.)
-                    per_loss = self.args.per_w * self.loss_all['per_loss'](sr_relu5_1, hr_relu5_1)
-                    loss += per_loss
-                    if (is_print):
-                        self.logger.info( 'per_loss: %.10f' %(per_loss.item()) )
-                        self.PerLossPlotter.store([current_epoch,i_batch, per_loss.item()])
-                if ('tpl_loss' in self.loss_all):
-                    #print(self.model.module.LTE.state_dict().keys()) #--- State_dict okay here, but only one. .. type(LTE( = dataparallel... with two devices 0 & 1...
-                    sr_lv1, sr_lv2, sr_lv3 = self.model(sr=sr) # bezieht sr_lv1, sr_lv2, sr_lv3 aus LTE_copy
-                    tpl_loss = self.args.tpl_w * self.loss_all['tpl_loss'](sr_lv3, sr_lv2, sr_lv1, 
-                        S, T_lv3, T_lv2, T_lv1)
-                    loss += tpl_loss
-                    if (is_print):
-                        self.logger.info( 'tpl_loss: %.10f' %(tpl_loss.item()) )
-                        self.TplLossPlotter.store([current_epoch,i_batch, tpl_loss.item()])
-                if ('adv_loss' in self.loss_all):
-                    adv_loss = self.args.adv_w * self.loss_all['adv_loss'](sr, hr)
-                    loss += adv_loss
-                    if (is_print):
-                        self.logger.info( 'adv_loss: %.10f' %(adv_loss.item()) )  
-                        self.AdvLossPlotter.store([current_epoch,i_batch, adv_loss.item()])
-            if (is_print):    
-                self.logger.info( 'total_loss: %.10f' %(loss.item()) )
-                self.TotLossPlotter.store([current_epoch,i_batch, loss.item()])
-            loss.backward()
-            self.optimizer.step()
-
-        if ((not is_init) and current_epoch % self.args.save_every == 0):
-            self.logger.info('saving the model...')
-            tmp = self.model.state_dict()
-            model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
-                (('SearchNet' not in key) and ('_copy' not in key))}
-            model_name = self.args.save_dir.strip('/')+'/model/model_'+str(current_epoch).zfill(5)+'.pt'
-            torch.save(model_state_dict, model_name)
+            #rec_loss = self.args.rec_w * self.loss_all['rec_loss'](sr, hr) #rec_w = weight of reconstruction loss - defined in train.sh (also default value in option.py) ---- loss_all defined in loss/loss.pt by "get_loss_dict" - change variable name in main.py
+            
 
   
         

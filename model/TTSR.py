@@ -22,11 +22,17 @@ class TTSR(nn.Module):
 
 
     def forward(self, lr=None, lrsr=None, ref=None, refsr=None, sr=None, no_backward=False):
+        #lr [N,RGB/gray,H,W]
+        #lrsr [N,RGB/gray,H*scale,W*scale]
+        #ref &refsr [N,RGB/gray, Hcrop, Wcrop]
+        
         #GPUtil.showUtilization() 10%
         #if sr == "test":
             #print("LTE "+str(torch.cuda.current_device())+"    "+str(self.LTE.state_dict().keys()))
             #print("LTE_Copy "+str(torch.cuda.current_device())+"    "+str(self.LTE_copy.state_dict().keys()))
             #return None
+            
+        print(lrsr.size())
         if (type(sr) != type(None)): #if sr is not None - but is None by default
             ### used in transferal perceptual loss
             #print("LTE "+str(torch.cuda.current_device())+"    "+str(self.LTE.state_dict().keys()))
@@ -37,8 +43,15 @@ class TTSR(nn.Module):
                 sr_lv1, sr_lv2, sr_lv3 = self.LTE_copy((sr + 1.) / 2.)
             else:
                 sr_lv1, sr_lv2, sr_lv3 = self.LTE((sr + 1.) / 2.)
-            return sr_lv1, sr_lv2, sr_lv3 
-        #GPUtil.showUtilization() 10%
+            return sr_lv1, sr_lv2, sr_lv3
+        if self.args.refTrain: #Calculate perceptual RSM - Loss during RSM-Pretraining
+            with torch.no_grad():
+                _, _, lrsr_lv3  = self.LTE((lrsr.detach() + 1.) / 2.)       
+                _, _, refsr_lv3 = self.LTE((refsr.detach() + 1.) / 2.)
+                ref_lv1, ref_lv2, ref_lv3 = self.LTE((ref.detach() + 1.) / 2.)
+                _, _, _, _, RelevanceTensor = self.SearchTransfer(lrsr_lv3, refsr_lv3, ref_lv1, ref_lv2, ref_lv3)                
+            return RelevanceTensor
+        
         ###if ref == None:
         ###    return self.RefSelector(lr)
         
@@ -49,7 +62,7 @@ class TTSR(nn.Module):
         ref_lv1, ref_lv2, ref_lv3 = self.LTE((ref.detach() + 1.) / 2.)
         #GPUtil.showUtilization()  67%
            #LTE results for ref, lrsr and refsr
-        S, T_lv3, T_lv2, T_lv1 = self.SearchTransfer(lrsr_lv3, refsr_lv3, ref_lv1, ref_lv2, ref_lv3)
+        S, T_lv3, T_lv2, T_lv1, _ = self.SearchTransfer(lrsr_lv3, refsr_lv3, ref_lv1, ref_lv2, ref_lv3)
         #GPUtil.showUtilization() out of memory
         sr = self.MainNet(lr, S, T_lv3, T_lv2, T_lv1)
 
