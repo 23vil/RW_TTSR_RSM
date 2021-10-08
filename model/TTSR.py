@@ -32,7 +32,6 @@ class TTSR(nn.Module):
             #print("LTE_Copy "+str(torch.cuda.current_device())+"    "+str(self.LTE_copy.state_dict().keys()))
             #return None
             
-        print(lrsr.size())
         if (type(sr) != type(None)): #if sr is not None - but is None by default
             ### used in transferal perceptual loss
             #print("LTE "+str(torch.cuda.current_device())+"    "+str(self.LTE.state_dict().keys()))

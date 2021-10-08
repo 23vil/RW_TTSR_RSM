@@ -112,8 +112,8 @@ class Trainer():
             lr = sample_batched['LR']
             lr_sr = sample_batched['LR_sr']
             hr = sample_batched['HR']
-            ref = sample_batched['Ref']
-            ref_sr = sample_batched['Ref_sr']
+            #ref = sample_batched['Ref']
+            #ref_sr = sample_batched['Ref_sr']
 
             sr, S, T_lv3, T_lv2, T_lv1 = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr) #Here the models output for the inputs (arguments) is requested. (forward pass)
             if (self.args.gray_transform):
@@ -198,8 +198,8 @@ class Trainer():
                     lr = sample_batched['LR']
                     lr_sr = sample_batched['LR_sr']
                     hr = sample_batched['HR']
-                    ref = sample_batched['Ref']
-                    ref_sr = sample_batched['Ref_sr']
+                    #ref = sample_batched['Ref']
+                    #ref_sr = sample_batched['Ref_sr']
                     
 
                     sr, S, T_lv3, T_lv2, T_lv1 = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr)
@@ -466,25 +466,30 @@ class Trainer():
             
         for i_batch, sample_batched in enumerate(self.dataloader['train']):
             
-            
             self.optimizer.zero_grad()
 
             sample_batched = self.prepare(sample_batched) #Batch is sent to GPU
 
             lr = sample_batched['LR']
             lr_sr = sample_batched['LR_sr']
-            ref = sample_batched['Ref']
-            ref_sr = sample_batched['Ref_sr']
-            refID = self.RefSelModel(lr)
+            
+            refID = self.RefSelModel(lr)            
+            reftmp = []
+            ref_srtmp = []
+            for ID in refID:
+                reftmp.append(self.dataloader['ref'][ID]['Ref']) 
+                ref_srtmp.append(self.dataloader['ref'][ID]['Ref_sr'])
+            ref = torch.stack((reftmp),0).to(self.device)
+            ref_sr = torch.stack((ref_srtmp),0).to(self.device)
+           
             RelevanceTensor = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr) #Here the models output for the inputs (arguments) is requested. (forward pass)
-            print(RelevanceTensor)
-            print(torch.mean(RelevanceTensor, dim=1))
-            RSM_loss = torch.tensor([1.,0.5,0.4,0.2])
+            #print(torch.mean(RelevanceTensor, dim=0))
+            RSM_loss = torch.mean(RelevanceTensor)
             RSM_loss = 1/RSM_loss
-            RSM_loss = torch.sum(RSM_loss.detach())
+            #RSM_loss = torch.sum(RSM_loss.detach())
             RSM_loss.requires_grad = True
             
-            rsmLoss.backward()
+            RSM_loss.backward()
             self.RefOptimizer.step()
             #self.RefScheduler
             
@@ -498,7 +503,7 @@ class Trainer():
             #imsave(os.path.join(self.args.save_dir, str(millis)+'.tif'), sr_save)
             
             ### calc loss
-            #is_print = ((i_batch + 1) % self.args.print_every == 0) ### flag of print # only print if the batch index is dividable by "print_every"
+            #is_print = ((i_batch + 1) % self.args.print_every == 0) ## flag of print # only print if the batch index is dividable by "print_every"
                 
             #rec_loss = self.args.rec_w * self.loss_all['rec_loss'](sr, hr) #rec_w = weight of reconstruction loss - defined in train.sh (also default value in option.py) ---- loss_all defined in loss/loss.pt by "get_loss_dict" - change variable name in main.py
             

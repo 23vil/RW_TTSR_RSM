@@ -32,7 +32,8 @@ def get_dataloader(args):
         for i in range(1):#vorher 5
             data_test = getattr(m, 'TestSet')(args=args, ref_level=str(i+1))
             dataloader_test[str(i+1)] = DataLoader(data_test, batch_size=1, shuffle=False, num_workers=args.num_workers)
-        dataloader = {'train': dataloader_train, 'test': dataloader_test}
+        data_ref = getattr(m, 'RefSet')(args)
+        dataloader = {'train': dataloader_train, 'test': dataloader_test, 'ref': data_ref}
 
     else:
         raise SystemExit('Error: no such type of dataset!')

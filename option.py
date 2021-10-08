@@ -36,7 +36,7 @@ parser.add_argument('--dataset_dir', type=str, default='/home/v-fuyang/Data/CUFE
                     help='Directory of dataset')
 parser.add_argument('--reference_dir', type=str, default='/home/ps815691/datasets/ReferenceImages',
                     help='Directory of reference images')
-parser.add_argument('--NumbRef', type=int, default=500,
+parser.add_argument('--NumbRef', type=int, default=80,
                     help='Number of available ReferenceImages')
 parser.add_argument('--refTrain', type=str2bool, default='False',
                     help='Train only Reference Selection Model')
