@@ -11,6 +11,7 @@ python main.py --save_dir ./eval/IMM/TTSR/$save_folder/ \
                --dataset IMMRW \
                --dataset_dir /home/ps815691/datasets/Small32-128_1024-4096_SSIMTreshold0-0/ \
                --model_path ./pretrainedModels/model_00001.pt \
+               --ref_model_path ./pretrainedModels/ref_model_00000.pt\
                --gray True \
                --gray_transform True \
                --cpu True\
@@ -19,5 +20,6 @@ python main.py --save_dir ./eval/IMM/TTSR/$save_folder/ \
                --per_w 1e-2 \
                --tpl_w 1e-2 \
                --adv_w 1e-3 \
-               --train_crop_size 32
+               --train_crop_size 32\
+               --seperateRefLoss True
                

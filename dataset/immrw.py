@@ -83,10 +83,13 @@ class ToTensorRef(object): #Only used for ref images
         
   
 class RandomCrop(object):
+    def __init__(self,args):
+        self.args = args
+    
     def __call__(self, sample):
         h,w = sample.shape[:2]
-        hpx=400
-        wpx=400
+        hpx=self.args.ref_crop_size
+        wpx=self.args.ref_crop_size
         hStart = torch.randint(0, h-hpx,(1,))
         wStart = torch.randint(0, w-wpx,(1,))
         crop = sample[hStart:hStart+hpx,wStart:wStart+wpx]
@@ -100,7 +103,7 @@ class TrainSet(Dataset):
         self.HR_list = sorted([os.path.join(args.dataset_dir, 'train/HR/', name) for name in #added / to end of path to make it windows compatible
             os.listdir( os.path.join(args.dataset_dir, 'train/HR/') )]) # lists names of files in directory
         self.transform = transform
-        
+        self.args = args
     def __len__(self):
         if len(self.LR_list) == len(self.HR_list):
             out = len(self.LR_list)
@@ -110,11 +113,9 @@ class TrainSet(Dataset):
         
 
     def __getitem__(self, idx):
-        croper = RandomCrop() #initialize RandomCrop 
         ### HR       
         HR = imread(self.HR_list[idx])
         LR = imread(self.LR_list[idx])
-        #HR = croper(HR) #Take a Random 160 x 160 Crop
         
         HR = np.array([HR, HR, HR]).transpose(1,2,0) #make RGB image from greyscale imput----- Solve differently later!
         LR = np.array([LR, LR, LR]).transpose(1,2,0)
@@ -149,7 +150,7 @@ class TrainSet(Dataset):
         return sample
 
 class TestSet(Dataset):
-    def __init__(self, args, ref_level='1', transform=transforms.Compose([ToTensor()])):
+    def __init__(self, args, transform=transforms.Compose([ToTensor()])):
         self.HR_list = sorted(glob.glob(os.path.join(args.dataset_dir, 'test/HR/', '*.tif'))) #path had to be altered manually --- Why *_0.png files for test?
         self.LR_list = sorted(glob.glob(os.path.join(args.dataset_dir, 'test/LR/', '*.tif')))  
         self.args = args
@@ -178,7 +179,7 @@ class TestSet(Dataset):
         return out
 
     def __getitem__(self, idx):
-        croper = RandomCrop() #initialize RandomCrop
+        croper = RandomCrop(self.args) #initialize RandomCrop
         ### HR
         HR = imread(self.HR_list[idx])
         LR = imread(self.LR_list[idx])
@@ -231,10 +232,12 @@ class TestSet(Dataset):
     
 class RefSet(Dataset):
     def __init__(self, args, transform=transforms.Compose([ToTensorRef()]) ):
-        self.ref_list = sorted([os.path.join(args.dataset_dir, 'train/ref/', name) for name in #added / to end of path to make it windows compatible
-            os.listdir( os.path.join(args.dataset_dir, 'train/ref/') )])  #added / to end of path to make it windows compatible
+        self.ref_list = sorted([os.path.join(args.reference_dir, name) for name in #added / to end of path to make it windows compatible
+            os.listdir( os.path.join(args.reference_dir))])  #added / to end of path to make it windows compatible
         self.transform = transform
         self.args = args
+        if self.args.ref_crop_size:
+            self.croper = RandomCrop(self.args)
     
     def __len__(self):
         if len(self.ref_list) == self.args.NumbRef:
@@ -245,20 +248,30 @@ class RefSet(Dataset):
             out = "Not enough files in reference image folder. Expecting "+str(self.args.NumbRef)+" files. Changes to the reference images make a new model training necessary. Change --NumbRef in options.py therefore!"    
         return out
         
-    def __getitem__(self, idx):
-        croper = RandomCrop() #initialize RandomCrop 
+    def __getitem__(self, idx):       
         ### Ref and Ref_sr
-        Ref_sub = imread(self.ref_list[idx])
-        Ref_sub = croper(Ref_sub) #Take a Random 160 x 160 Crop
-        Ref_sub = np.array([Ref_sub, Ref_sub, Ref_sub]).transpose(1,2,0) #make RGB image from greyscale imput
+        Ref_sub = imread(self.ref_list[idx]) 
+        #Ref_sub.show()
+        if self.args.ref_crop_size:
+            Ref_sub = self.croper(Ref_sub) #Take a Random 160 x 160 Crop
+            
+        if self.args.gray:
+            Ref_sub = np.array([Ref_sub, Ref_sub, Ref_sub]).transpose(1,2,0) #make RGB image from greyscale imput
                
         h2, w2 = Ref_sub.shape[:2]
         Ref_sr_sub = np.array(Image.fromarray(Ref_sub).resize((w2//4, h2//4), Image.BICUBIC))
         Ref_sr_sub = np.array(Image.fromarray(Ref_sr_sub).resize((w2, h2), Image.BICUBIC))
     
         ### complete ref and ref_sr to the same size, to use batch_size > 1
-        Ref = np.zeros((400, 400, 3))
-        Ref_sr = np.zeros((400, 400, 3))
+        if self.args.ref_crop_size:
+            Ref = np.zeros((self.args.ref_crop_size, self.args.ref_crop_size, 3))
+            Ref_sr = np.zeros((self.args.ref_crop_size, self.args.ref_crop_size, 3))
+        elif not self.args.ref_image_size:
+            print("Either ref_crop_size or ref_image_size has to be set! Both are = None! See options.py")
+        else:
+            Ref = np.zeros((self.args.ref_image_size, self.args.ref_image_size, 3))
+            Ref_sr = np.zeros((self.args.ref_image_size, self.args.ref_image_size, 3))
+            
         Ref[:h2, :w2] = Ref_sub
         Ref_sr[:h2, :w2] = Ref_sr_sub
 

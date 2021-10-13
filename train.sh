@@ -22,7 +22,7 @@ python main.py --save_dir ./train/IMM/TTSR/$save_folder/ \
                --tpl_use_S True\
                --batch_size 4 \
                --num_init_epochs 0 \
-               --num_epochs 2 \
+               --num_epochs 1 \
                --print_every 1 \
                --save_every 1 \
                --val_every 1 \
@@ -31,7 +31,8 @@ python main.py --save_dir ./train/IMM/TTSR/$save_folder/ \
                --GAN_type GAN \
                --train_crop_size 32 \
                --debug True\
-               --refTrain True\
+               --refTrain False\
+               --seperateRefLoss True\
                --retrain False \
                --model_path ./pretrainedModels/model_00001.pt
 #               --dataset_dir /home/ps815691/datasets/32-128_1024-4096_SSIMTreshold0-1 \

@@ -13,5 +13,7 @@ class RefSelector(nn.Module):
         self.RSel.fc = nn.Linear(in_features=512, out_features=self.noRef, bias=True)
     
     def forward(self, LR):
+        #if self.args.test or self.args.eval:
+        #   self.RSel.eval()
         refID  = torch.argmax(self.RSel(LR), dim=1)
         return refID
