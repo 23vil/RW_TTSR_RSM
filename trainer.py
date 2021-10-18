@@ -66,7 +66,7 @@ class Trainer():
         self.optimizer = optim.Adam(self.params, betas=(args.beta1, args.beta2), eps=args.eps)
         self.scheduler = optim.lr_scheduler.StepLR(
             self.optimizer, step_size=self.args.decay, gamma=self.args.gamma)
-        if self.args.refTrain:
+        if self.args.seperateRefLoss:
             self.RefOptimizer = optim.Adam(self.RefSelModel.RSel.parameters(), betas=(args.beta1, args.beta2), eps=args.eps)
             self.RefScheduler = optim.lr_scheduler.StepLR(
                 self.optimizer, step_size=self.args.decay, gamma=self.args.gamma)
@@ -97,13 +97,11 @@ class Trainer():
             model_state_dict = self.RefSelModel.state_dict()
             model_state_dict.update(model_state_dict_save)
             self.RefSelModel.load_state_dict(model_state_dict)
-
-
+            
     def prepare(self, sample_batched):
         for key in sample_batched.keys():
             sample_batched[key] = sample_batched[key].to(self.device)
         return sample_batched
-
     def train(self, current_epoch=0, is_init=False):
         
         self.model.train() #self.model is TTSR.py from model folder
@@ -212,14 +210,16 @@ class Trainer():
                 (('SearchNet' not in key) and ('_copy' not in key))}
             model_name = self.args.save_dir.strip('/')+'/model/model_'+str(current_epoch).zfill(5)+'.pt'
             torch.save(model_state_dict, model_name)
-            self.logger.info('saving the reference model...')
-            tmp = self.RefSelModel.state_dict()
-            model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
-                (('SearchNet' not in key) and ('_copy' not in key))}
-            model_name = self.args.save_dir.strip('/')+'/model/ref_model_'+str(current_epoch).zfill(5)+'.pt'
-            torch.save(model_state_dict, model_name)
-
+            if self.args.seperateRefLoss: #RSM in seperate File
+                self.logger.info('saving the reference model...')
+                tmp = self.RefSelModel.state_dict()
+                model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
+                    (('SearchNet' not in key) and ('_copy' not in key))}
+                model_name = self.args.save_dir.strip('/')+'/model/ref_model_'+str(current_epoch).zfill(5)+'.pt'
+                torch.save(model_state_dict, model_name)
+                
     def evaluate(self, current_epoch=0):
+        
         self.logger.info('Epoch ' + str(current_epoch) + ' evaluation process...')
         if self.args.debug:
             self.evalLossesDf = pd.DataFrame(columns=['Box','srcFile','TotLoss','RecLoss','PerLoss','TplLoss','AdvLoss'])
@@ -464,7 +464,6 @@ class Trainer():
                     %(self.max_psnr, self.max_psnr_epoch, self.max_ssim, self.max_ssim_epoch))
 
         self.logger.info('Evaluation over.')
-
     def test(self):
         self.logger.info('Test process...')
         self.logger.info('lr path:     %s' %(self.args.lr_path))
@@ -472,6 +471,7 @@ class Trainer():
         
         if self.args.seperateRefLoss:
             self.RefSelModel.eval()
+        self.model.eval()
         
         ### LR and LR_sr
         LR = imread(self.args.lr_path)
@@ -508,7 +508,7 @@ class Trainer():
         Ref_sr = torch.stack((ref_srtmp),0).to(self.device)
 
 
-        self.model.eval()
+        
         with torch.no_grad():
             sr, _, _, _, _ = self.model(lr=LR_t, lrsr=LR_sr_t, ref=Ref, refsr=Ref_sr)
             if (self.args.gray_transform):
@@ -541,7 +541,7 @@ class Trainer():
                 ref_srtmp.append(self.dataloader['ref'][ID]['Ref_sr'])
             ref = torch.stack((reftmp),0).to(self.device)
             ref_sr = torch.stack((ref_srtmp),0).to(self.device)
-            RelevanceTensor = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr) #Here the models output for the inputs (arguments) is requested. (forward pass)
+            RelevanceTensor = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr, relevance=True) #Here the models output for the inputs (arguments) is requested. (forward pass)
             #print(torch.mean(RelevanceTensor, dim=0))
             RSM_loss = torch.mean(RelevanceTensor)
 
@@ -551,8 +551,9 @@ class Trainer():
             print(self.RefSelModel.RSel.fc.weight)
             print("vorher")
             RSM_loss.backward()
-            print(self.RefSelModel.RSel.fc.weight)
+            
             self.RefOptimizer.step()
+            print(self.RefSelModel.RSel.fc.weight)
             self.RefOptimizer.zero_grad()
             #self.RefScheduler
             
