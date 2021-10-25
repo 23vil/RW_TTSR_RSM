@@ -24,6 +24,8 @@ class LTE(torch.nn.Module):
             self.slice2.add_module(str(x), vgg_pretrained_features[x]) # slice 2 contains VGG layer 2 - 6
         for x in range(7, 12):
             self.slice3.add_module(str(x), vgg_pretrained_features[x]) # slice 3 contains VGG layer 7 - 11
+        
+            
         if not requires_grad:
             for param in self.slice1.parameters():
                 param.requires_grad = requires_grad

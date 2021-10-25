@@ -8,7 +8,7 @@ import GPUtil
 
 
 class TTSR(nn.Module):
-    def __init__(self, args):
+    def __init__(self, args, device):
         super(TTSR, self).__init__()
         #Create all objects for Model from different .py-files
         self.args = args
@@ -18,8 +18,9 @@ class TTSR(nn.Module):
         self.LTE      = LTE.LTE(requires_grad=True) # create LTE object from model/LTE.py
         self.LTE_copy = LTE.LTE(requires_grad=False) ### used in transferal perceptual loss #second LTE object
         self.SearchTransfer = SearchTransfer.SearchTransfer() #object from model/SearchTransfer.py
-        if not self.args.seperateRefLoss:
-            self.RefSelector = RefSelector.RefSelector(self.args)
+        #if not self.args.seperateRefLoss:
+        self.device = device
+        self.RefSelector = RefSelector.RefSelector2(self.args, device)
 
 
     def forward(self, lr=None, lrsr=None, ref=None, refsr=None, sr=None, no_backward=False, relevance = False):
@@ -48,8 +49,6 @@ class TTSR(nn.Module):
                 _, _, _, _, RelevanceTensor = self.SearchTransfer(lrsr_lv3, refsr_lv3, ref_lv1, ref_lv2, ref_lv3)                
             return RelevanceTensor
         
-        ###if ref == None:
-        ###    return self.RefSelector(lr)
         
         _, _, lrsr_lv3  = self.LTE((lrsr.detach() + 1.) / 2.) #.detach() is similar to no_grad - lrsr is argument of forward - arguments are defined in trainer.py lines 69 - 75       
         _, _, refsr_lv3 = self.LTE((refsr.detach() + 1.) / 2.)

@@ -1,6 +1,9 @@
 from option import args
 from utils import mkExpDir
+
 from dataset import dataloader
+#from dataset import RefRelevance
+
 from model import TTSR
 from model import RefSelector
 from loss.loss import get_loss_dict
@@ -12,6 +15,7 @@ import torch.nn as nn
 import os
 import torch
 import warnings
+from sys import exit
 warnings.filterwarnings('ignore')
 
 def free_device(args): #Check for free device and return respective device, also considering the option.py configuration (cpu/gpu).
@@ -33,23 +37,29 @@ if __name__ == '__main__':
 
     ### device and model
     device = free_device(args)
-    _model = TTSR.TTSR(args).to(device)
-    if args.seperateRefLoss:
-        _RefSelModel = RefSelector.RefSelector(args).to(device)
+    _model = TTSR.TTSR(args, device).to(device)
+    #if args.seperateRefLoss:
+    #    _RefSelModel = RefSelector.RefSelector2(args, device).to(device)
         
     if ((not args.cpu) and (args.num_gpu > 1)):
         _model = nn.DataParallel(_model, list(range(args.num_gpu)))       
         #_model = DistributedDataParallel(_model, list(range(args.num_gpu)))
 
     ### loss
-    _loss_all = get_loss_dict(args, _logger) #defined in loss/loss.pt
+    _loss_all = get_loss_dict(args, _logger, device) #defined in loss/loss.pt
+    
+    
     
     ### trainer initialization
     if args.seperateRefLoss: ## Train with seperated RSM
         t = Trainer(args, device, _logger, _dataloader, _RefSelModel, _model, _loss_all)
     else: ##Train with RSM included in main model
         t = Trainer(args, device,  _logger, _dataloader, None, _model, _loss_all)
-
+    
+    #RefRelevanceMap = RefRelevance.RefRelevanceMap(args, _model, _dataloader, device)
+    
+    #print(RefRelevanceMap.generateRelevanceMap())
+    #exit()
     ### test / eval / train
     if (args.test):      ##Test Mode
         t.load(model_path=args.model_path)
@@ -80,6 +90,8 @@ if __name__ == '__main__':
     else:       ##Train new model from scratch
         for epoch in range(1, args.num_init_epochs+1):
             t.train(current_epoch=epoch, is_init=True)
+            #if (epoch % args.val_every == 0):
+            #    t.evaluate(current_epoch=epoch)
         for epoch in range(1, args.num_epochs+1):
             t.train(current_epoch=epoch, is_init=False)
             t.TotLossPlotter.write(args.save_dir)

@@ -66,13 +66,13 @@ class TPerceptualLoss(nn.Module):
 
 
 class AdversarialLoss(nn.Module):
-    def __init__(self, logger, use_cpu=False, num_gpu=1, gan_type='WGAN_GP', gan_k=1, 
+    def __init__(self, logger, device, use_cpu=False, num_gpu=1, gan_type='WGAN_GP', gan_k=1, 
         lr_dis=1e-4, train_crop_size=32):#crop size default value,but defined in
         super(AdversarialLoss, self).__init__()
         self.logger = logger
         self.gan_type = gan_type
         self.gan_k = gan_k
-        self.device = torch.device('cpu' if use_cpu else 'cuda')
+        self.device = device #torch.device('cpu' if use_cpu else 'cuda')
         self.discriminator = discriminator.Discriminator(train_crop_size*4).to(self.device)
         if (num_gpu > 1):
             self.discriminator = nn.DataParallel(self.discriminator, list(range(num_gpu)))
@@ -144,7 +144,7 @@ class AdversarialLoss(nn.Module):
         return D_state_dict, D_optim_state_dict
 
 
-def get_loss_dict(args, logger):
+def get_loss_dict(args, logger, device):
     loss = {}
     if (abs(args.rec_w - 0) <= 1e-8): #If Reconstruction loss weight smaller than 1e-8 --> System Error
         raise SystemExit('NotImplementError: ReconstructionLoss must exist!')
@@ -155,7 +155,7 @@ def get_loss_dict(args, logger):
     if (abs(args.tpl_w - 0) > 1e-8):
         loss['tpl_loss'] = TPerceptualLoss(use_S=args.tpl_use_S, type=args.tpl_type)#If Reconstruction loss weight smaller than 1e-8 --> System Error
     if (abs(args.adv_w - 0) > 1e-8):
-        loss['adv_loss'] = AdversarialLoss(logger=logger, use_cpu=args.cpu, num_gpu=args.num_gpu, 
+        loss['adv_loss'] = AdversarialLoss(logger=logger,device=device, use_cpu=args.cpu, num_gpu=args.num_gpu, 
             gan_type=args.GAN_type, gan_k=args.GAN_k, lr_dis=args.lr_rate_dis,
             train_crop_size=args.train_crop_size)  # Reconstruction loss weight smaller than 1e-8 --> System Error
     return loss
