@@ -37,10 +37,7 @@ if __name__ == '__main__':
 
     ### device and model
     device = free_device(args)
-    _model = TTSR.TTSR(args, device).to(device)
-    #if args.seperateRefLoss:
-    #    _RefSelModel = RefSelector.RefSelector2(args, device).to(device)
-        
+    _model = TTSR.TTSR(args, device).to(device)        
     if ((not args.cpu) and (args.num_gpu > 1)):
         _model = nn.DataParallel(_model, list(range(args.num_gpu)))       
         #_model = DistributedDataParallel(_model, list(range(args.num_gpu)))
@@ -51,35 +48,22 @@ if __name__ == '__main__':
     
     
     ### trainer initialization
-    if args.seperateRefLoss: ## Train with seperated RSM
-        t = Trainer(args, device, _logger, _dataloader, _RefSelModel, _model, _loss_all)
-    else: ##Train with RSM included in main model
-        t = Trainer(args, device,  _logger, _dataloader, None, _model, _loss_all)
+    t = Trainer(args, device,  _logger, _dataloader, _model, _loss_all)
     
-    #RefRelevanceMap = RefRelevance.RefRelevanceMap(args, _model, _dataloader, device)
-    
-    #print(RefRelevanceMap.generateRelevanceMap())
-    #exit()
     ### test / eval / train
     if (args.test):      ##Test Mode
         t.load(model_path=args.model_path)
-        if args.seperateRefLoss:
-            t.loadRef(ref_model_path=args.ref_model_path)
         t.test()
     elif (args.eval):   ##Evaluation Mode
         t.load(model_path=args.model_path)
-        if args.seperateRefLoss:
-            t.loadRef(ref_model_path=args.ref_model_path)
         t.evaluate()
-    elif (args.refTrain):       ##Train only Reference Selection Model
-        for epoch in range(1, args.num_epochs+1):
-            if (args.retrain):
-                t.loadRef(ref_model_path=args.ref_model_path)
-            t.refTrain()
+    #elif (args.refTrain):       ##Train only Reference Selection Model
+    #    for epoch in range(1, args.num_epochs+1):
+    #        if (args.retrain):
+    #            t.loadRef(ref_model_path=args.ref_model_path)
+    #        t.refTrain()
     elif (args.retrain):        ##Load pretrained Model and continue training this Model
         t.load(model_path=args.model_path)
-        if args.seperateRefLoss:
-            t.loadRef(model_path=args.ref_model_path)
         t.evaluate()
         for epoch in range(1, args.num_init_epochs+1):  #Initialization epoch
             t.train(current_epoch=epoch, is_init=True)

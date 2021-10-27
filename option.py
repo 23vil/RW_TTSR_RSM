@@ -44,12 +44,12 @@ parser.add_argument('--reference_dir', type=str, default='/home/ps815691/dataset
                     help='Directory of reference images')
 parser.add_argument('--NumbRef', type=int, default=3,
                     help='Number of available ReferenceImages')
-parser.add_argument('--refTrain', type=str2bool, default='False',
-                    help='True: Train only Reference Selection Model, False: Train TTSR and RSM')
-parser.add_argument('--seperateRefLoss', type=str2bool, default='False',
-                    help='True: Use seperate metric as Loss for RSM training, False: Train TTSR and RSM end-to-end.')
-parser.add_argument('--ref_model_path', type=str, default='None',
-                    help='Path of reference model, if not included in main model.')
+#parser.add_argument('--refTrain', type=str2bool, default='False',
+#                    help='True: Train only Reference Selection Model, False: Train TTSR and RSM')
+#parser.add_argument('--seperateRefLoss', type=str2bool, default='False',
+#                    help='True: Use seperate metric as Loss for RSM training, False: Train TTSR and RSM end-to-end.')
+#parser.add_argument('--ref_model_path', type=str, default='None',
+#                    help='Path of reference model, if not included in main model.')
 parser.add_argument('--ref_crop_size', type=int, default='400',
                     help='Uses random crops of ref_crop_size*ref_crop_size of the original reference image for training etc. If 0 --> Original image size (ref_image_size) is used.')
 parser.add_argument('--ref_image_size', type=int, default='0',

@@ -20,7 +20,7 @@ class TTSR(nn.Module):
         self.SearchTransfer = SearchTransfer.SearchTransfer() #object from model/SearchTransfer.py
         #if not self.args.seperateRefLoss:
         self.device = device
-        self.RefSelector = RefSelector.RefSelector2(self.args, device)
+        self.RefSelector = RefSelector.RefSelector(self.args, device)
 
 
     def forward(self, lr=None, lrsr=None, ref=None, refsr=None, sr=None, no_backward=False, relevance = False):
@@ -41,13 +41,13 @@ class TTSR(nn.Module):
             else:
                 sr_lv1, sr_lv2, sr_lv3 = self.LTE((sr + 1.) / 2.)
             return sr_lv1, sr_lv2, sr_lv3
-        if self.args.seperateRefLoss and relevance: #Calculate perceptual RSM - Loss during RSM-Pretraining
-            with torch.no_grad():
-                _, _, lrsr_lv3  = self.LTE((lrsr.detach() + 1.) / 2.)       
-                _, _, refsr_lv3 = self.LTE((refsr.detach() + 1.) / 2.)
-                ref_lv1, ref_lv2, ref_lv3 = self.LTE((ref.detach() + 1.) / 2.)
-                _, _, _, _, RelevanceTensor = self.SearchTransfer(lrsr_lv3, refsr_lv3, ref_lv1, ref_lv2, ref_lv3)                
-            return RelevanceTensor
+        #if self.args.seperateRefLoss and relevance: #Calculate perceptual RSM - Loss during RSM-Pretraining
+        #    with torch.no_grad():
+        #        _, _, lrsr_lv3  = self.LTE((lrsr.detach() + 1.) / 2.)       
+        #        _, _, refsr_lv3 = self.LTE((refsr.detach() + 1.) / 2.)
+        #        ref_lv1, ref_lv2, ref_lv3 = self.LTE((ref.detach() + 1.) / 2.)
+        #        _, _, _, _, RelevanceTensor = self.SearchTransfer(lrsr_lv3, refsr_lv3, ref_lv1, ref_lv2, ref_lv3)                
+        #    return RelevanceTensor
         
         
         _, _, lrsr_lv3  = self.LTE((lrsr.detach() + 1.) / 2.) #.detach() is similar to no_grad - lrsr is argument of forward - arguments are defined in trainer.py lines 69 - 75       
