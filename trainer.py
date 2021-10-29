@@ -215,12 +215,23 @@ class Trainer():
                 (('SearchNet' not in key) and ('_copy' not in key))}
             model_name = self.args.save_dir.strip('/')+'/model/model_'+str(current_epoch).zfill(5)+'.pt'
             torch.save(model_state_dict, model_name)
-                
-    def evaluate(self, current_epoch=0):
+        
+        if ((is_init) and current_epoch % self.args.save_every == 0):
+            self.logger.info('saving the init model...')
+            tmp = self.model.state_dict()
+            model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
+                (('SearchNet' not in key) and ('_copy' not in key))}
+            model_name = self.args.save_dir.strip('/')+'/model/init-model_'+str(current_epoch).zfill(5)+'.pt'
+            torch.save(model_state_dict, model_name)
+            
+    def evaluate(self, current_epoch=0, is_init=False):
         
         self.logger.info('Epoch ' + str(current_epoch) + ' evaluation process...')
         if self.args.debug:
-            self.evalLossesDf = pd.DataFrame(columns=['Box','srcFile','TotLoss','RecLoss','PerLoss','TplLoss','AdvLoss'])
+            if not is_init:
+                self.evalLossesDf = pd.DataFrame(columns=['Box','srcFile','TotLoss','RecLoss','PerLoss','TplLoss','AdvLoss'])
+            else:
+                self.evalLossesDf = pd.DataFrame(columns=['Box','srcFile','TotLoss','RecLoss'])
         if (self.args.dataset):# == 'IMM'):  #Dataset name has to be manually altered here.. better Solution!
             self.model.eval()
             with torch.no_grad():
@@ -271,35 +282,44 @@ class Trainer():
                     rec_loss_tmp = self.args.rec_w * self.loss_all['rec_loss'](sr, hr) #rec_w = weight of reconstruction loss - defined in train.sh (also default value in option.py) ---- loss_all defined in loss/loss.pt by "get_loss_dict" - change variable name in main.py
                     rec_loss += rec_loss_tmp
                     
-                    ##Per.Loss
-                    sr_relu5_1 = self.vgg19((sr + 1.) / 2.)
-                    with torch.no_grad():
-                        hr_relu5_1 = self.vgg19((hr.detach() + 1.) / 2.)
+                    if not is_init:
                         
-                    per_loss_tmp = self.args.per_w * self.loss_all['per_loss'](sr_relu5_1, hr_relu5_1)
-                    per_loss += per_loss_tmp
-                    
-                    ##Tpl Loss
-                    sr_lv1, sr_lv2, sr_lv3 = self.model(sr=sr, no_backward = True)
-                    
-                    tpl_loss_tmp = self.args.tpl_w * self.loss_all['tpl_loss'](sr_lv3, sr_lv2, sr_lv1, S, T_lv3, T_lv2, T_lv1)
-                    tpl_loss += tpl_loss_tmp
-                    
-                    ##Adv Loss
-                    with torch.enable_grad():
-                        adv_loss_tmp = self.args.adv_w * self.loss_all['adv_loss'](sr, hr, no_backward = True)
-                        adv_loss += adv_loss_tmp
+                        ##Per.Loss
+                        sr_relu5_1 = self.vgg19((sr + 1.) / 2.)
+                        with torch.no_grad():
+                            hr_relu5_1 = self.vgg19((hr.detach() + 1.) / 2.)
+                            
+                        per_loss_tmp = self.args.per_w * self.loss_all['per_loss'](sr_relu5_1, hr_relu5_1)
+                        per_loss += per_loss_tmp
                         
-                    #Store Losses for Loss-HeatMap generation
-                    if self.args.debug:
-                        self.evalLossesDf = self.evalLossesDf.append({
-                                                                    'Box':box ,
-                                                                    'srcFile':srcFile,
-                                                                    'TotLoss':rec_loss_tmp.cpu() + per_loss_tmp.cpu() + tpl_loss_tmp.cpu() + adv_loss_tmp.cpu(),
-                                                                    'RecLoss':rec_loss_tmp.cpu(),
-                                                                    'PerLoss':per_loss_tmp.cpu(),
-                                                                    'TplLoss':tpl_loss_tmp.cpu(),
-                                                                    'AdvLoss':adv_loss_tmp.cpu()},ignore_index=True)
+                        ##Tpl Loss
+                        sr_lv1, sr_lv2, sr_lv3 = self.model(sr=sr, no_backward = True)
+                        
+                        tpl_loss_tmp = self.args.tpl_w * self.loss_all['tpl_loss'](sr_lv3, sr_lv2, sr_lv1, S, T_lv3, T_lv2, T_lv1)
+                        tpl_loss += tpl_loss_tmp
+                        
+                        ##Adv Loss
+                        with torch.enable_grad():
+                            adv_loss_tmp = self.args.adv_w * self.loss_all['adv_loss'](sr, hr, no_backward = True)
+                            adv_loss += adv_loss_tmp
+                        
+                        #Store Losses for Loss-HeatMap generation
+                        if self.args.debug:
+                            self.evalLossesDf = self.evalLossesDf.append({
+                                                                        'Box':box ,
+                                                                        'srcFile':srcFile,
+                                                                        'TotLoss':rec_loss_tmp.cpu() + per_loss_tmp.cpu() + tpl_loss_tmp.cpu() + adv_loss_tmp.cpu(),
+                                                                        'RecLoss':rec_loss_tmp.cpu(),
+                                                                        'PerLoss':per_loss_tmp.cpu(),
+                                                                        'TplLoss':tpl_loss_tmp.cpu(),
+                                                                        'AdvLoss':adv_loss_tmp.cpu()},ignore_index=True)
+                    else:
+                        if self.args.debug:
+                            self.evalLossesDf = self.evalLossesDf.append({
+                                                                        'Box':box ,
+                                                                        'srcFile':srcFile,
+                                                                        'TotLoss':rec_loss_tmp.cpu(),
+                                                                        'RecLoss':rec_loss_tmp.cpu()},ignore_index=True)
                         
                 ###Save Loss HeatMaps
                 if self.args.debug:
@@ -320,12 +340,13 @@ class Trainer():
                                 heatCounter[datum.srcFile][0][line][row]+= 1
                                 heatMaps[datum.srcFile][1][line][row]+= datum.RecLoss
                                 heatCounter[datum.srcFile][1][line][row]+= 1
-                                heatMaps[datum.srcFile][2][line][row]+= datum.PerLoss
-                                heatCounter[datum.srcFile][2][line][row]+= 1
-                                heatMaps[datum.srcFile][3][line][row]+= datum.TplLoss
-                                heatCounter[datum.srcFile][3][line][row]+= 1
-                                heatMaps[datum.srcFile][4][line][row]+= datum.AdvLoss
-                                heatCounter[datum.srcFile][4][line][row]+= 1
+                                if not is_init:
+                                    heatMaps[datum.srcFile][2][line][row]+= datum.PerLoss
+                                    heatCounter[datum.srcFile][2][line][row]+= 1
+                                    heatMaps[datum.srcFile][3][line][row]+= datum.TplLoss
+                                    heatCounter[datum.srcFile][3][line][row]+= 1
+                                    heatMaps[datum.srcFile][4][line][row]+= datum.AdvLoss
+                                    heatCounter[datum.srcFile][4][line][row]+= 1
                                 
                     #def show_at_intervals(seq, interval, decimals=1):
                         #x = np.copy(seq)
@@ -336,35 +357,48 @@ class Trainer():
                         #new_ticks[replate_at] = x[replate_at].round(decimals)
                         #return new_ticks 
                     
-                    for image in originalImages:                       
-                        for i, lossName in enumerate(['TotLoss', 'RecLoss', 'PerLoss', 'TplLoss', 'AdvLoss']):
-                            heatMaps[image][i] = np.divide(heatMaps[image][i],heatCounter[image][i])
-                            fig, ax = plt.subplots(figsize=(10,10))
-                            sns.set(rc={'axes.facecolor':'gray', 'figure.facecolor':'white',"font.size":11,"axes.titlesize":11,"axes.labelsize":11})
-                            im = plt.imread(os.path.join("/home/ps815691/git/PSSR/datasources/fixed/IMMresVar1024-4096/lr/valid/",image))
-                            ax = sns.heatmap(heatMaps[image][i], linewidth=0, linecolor='black', cmap='jet', xticklabels = 200, yticklabels = 200, cbar_kws={"shrink": 0.75})#, vmin= 23)
-                            ax = ax.imshow(im, extent=[0, 1024, 0, 1024])
-                            plt.savefig(os.path.join(self.args.save_dir,str(current_epoch+1)+"_"+image[-6:-4]+"_"+lossName+'.png'))
-                            #plt.close(fig)
-                        
+                    if not is_init:
+                        for image in originalImages:                       
+                            for i, lossName in enumerate(['TotLoss', 'RecLoss', 'PerLoss', 'TplLoss', 'AdvLoss']):
+                                heatMaps[image][i] = np.divide(heatMaps[image][i],heatCounter[image][i])
+                                fig, ax = plt.subplots(figsize=(10,10))
+                                sns.set(rc={'axes.facecolor':'gray', 'figure.facecolor':'white',"font.size":11,"axes.titlesize":11,"axes.labelsize":11})
+                                im = plt.imread(os.path.join("/home/ps815691/git/PSSR/datasources/fixed/IMMresVar1024-4096/lr/valid/",image))
+                                ax = sns.heatmap(heatMaps[image][i], linewidth=0, linecolor='black', cmap='jet', xticklabels = 200, yticklabels = 200, cbar_kws={"shrink": 0.75})#, vmin= 23)
+                                ax = ax.imshow(im, extent=[0, 1024, 0, 1024])
+                                plt.savefig(os.path.join(self.args.save_dir,str(current_epoch+1)+"_"+image[-6:-4]+"_"+lossName+'.png'))
+                                #plt.close(fig)
+                    else:
+                        for image in originalImages:
+                            for i, lossName in enumerate(['TotLoss', 'RecLoss']):
+                                heatMaps[image][i] = np.divide(heatMaps[image][i],heatCounter[image][i])
+                                fig, ax = plt.subplots(figsize=(10,10))
+                                sns.set(rc={'axes.facecolor':'gray', 'figure.facecolor':'white',"font.size":11,"axes.titlesize":11,"axes.labelsize":11})
+                                im = plt.imread(os.path.join("/home/ps815691/git/PSSR/datasources/fixed/IMMresVar1024-4096/lr/valid/",image))
+                                ax = sns.heatmap(heatMaps[image][i], linewidth=0, linecolor='black', cmap='jet', xticklabels = 200, yticklabels = 200, cbar_kws={"shrink": 0.75})#, vmin= 23)
+                                ax = ax.imshow(im, extent=[0, 1024, 0, 1024])
+                                plt.savefig(os.path.join(self.args.save_dir,str(current_epoch+1)+"_"+image[-6:-4]+"_"+lossName+'.png'))
+                                #plt.close(fig)
+                    
                     self.evalLossesDf.to_csv(os.path.join(self.args.save_dir,"lossheatMap.csv"))    
                         
-                        
-                        
-                        
+
                         
                 ###average & print losses and calc total val_loss
                 rec_loss = rec_loss / cnt 
-                per_loss = per_loss / cnt
-                tpl_loss = tpl_loss / cnt
-                adv_loss = adv_loss / cnt
-                val_loss = rec_loss + per_loss + tpl_loss + adv_loss 
+                if not is_init:
+                    per_loss = per_loss / cnt
+                    tpl_loss = tpl_loss / cnt
+                    adv_loss = adv_loss / cnt
+                    val_loss = rec_loss + per_loss + tpl_loss + adv_loss 
+                else: val_loss = rec_loss
                 
               
                 self.logger.info( 'val_rec_loss: %.10f' %(rec_loss.item()) )
-                self.logger.info( 'val_per_loss: %.10f' %(per_loss.item()) )
-                self.logger.info( 'val_tpl_loss: %.10f' %(tpl_loss.item()) )
-                self.logger.info( 'val_adv_loss: %.10f' %(adv_loss.item()) )
+                if not is_init:
+                    self.logger.info( 'val_per_loss: %.10f' %(per_loss.item()) )
+                    self.logger.info( 'val_tpl_loss: %.10f' %(tpl_loss.item()) )
+                    self.logger.info( 'val_adv_loss: %.10f' %(adv_loss.item()) )
                 self.logger.info( 'total_val_loss: %.10f' %(val_loss.item()) )
                 
                 ###save best model according to loss
@@ -428,6 +462,7 @@ class Trainer():
                     %(self.max_psnr, self.max_psnr_epoch, self.max_ssim, self.max_ssim_epoch))
 
         self.logger.info('Evaluation over.')
+        
     def test(self):
         self.logger.info('Test process...')
         self.logger.info('lr path:     %s' %(self.args.lr_path))

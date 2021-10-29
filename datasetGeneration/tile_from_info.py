@@ -63,8 +63,9 @@ import yaml
 from fastai.script import *
 from fastai.vision import *
 from utils import *
-from utils.crappifiers import *
+#from utils.crappifiers import *
 from pathlib import Path
+import os
 from fastprogress import master_bar, progress_bar
 from time import sleep
 import torchvision
@@ -207,19 +208,24 @@ def get_tile_puller(tile_stat, crap_func, t_frames, z_frames):
 
         else:
             print("Mismatch in HR-LR Image Sizes")
-        SSIM = 0
-        PSNR = 0
-        while SSIM < 0.01:
+        #SSIM = 0
+        #PSNR = 0
+        boxEstDeviationXY = None
+        #while SSIM < 0.01:
+        while boxEstDeviationXY == None or boxEstDeviationXY[0] not in range(-8,8) or boxEstDeviationXY[1] not in range(-8,8):      
             try:
                 LR_crop_img, LRbox = draw_random_tile(LR_img_data[LRmid_frame], istat['tile_sz'], LRthresh, LRthresh_pct) ## Original HR Image Crop is done here
                 ##box contains information about the tiles position in the full frame image....box = [xs.start, ys.start, xs.stop, ys.stop]            
                 specTile = draw_specific_tile(HR_img_data[HRmid_frame], LR_crop_img, LRbox, magnification)
+                HRboxEstimate =LRbox*magnification
+                boxEstDeviationXY=specTile[3]
                 SSIM = specTile[1]
                 PSNR = specTile[2]
             except:
                 print("except")
-                SSIM = 0.05
-                PSNR = 0.05
+                boxEstDeviationXY = None
+                #SSIM = 0.005
+                #PSNR = 0.005
             
         LR_crop_img.save(crap_folder/f'{id:06d}_{LRfn.stem}.tif')
         HR_crop_img = specTile[0]
@@ -242,6 +248,8 @@ def get_tile_puller(tile_stat, crap_func, t_frames, z_frames):
         info = dict(istat)
         info['id'] = id
         info['box'] = LRbox
+        info['HRboxEstimate'] = HRboxEstimate
+        info['HRboxDeviation'] = boxEstDeviationXY
         info['tile_sz'] = tile_sz
         crop_data = np.array(HR_crop_img)
         info['after_mean'] = crop_data.mean()
@@ -307,7 +315,7 @@ def main(out: Param("dataset folder", Path, required=True),
  #           crap_func = None
  #       else:
  #           crap_func = partial(crap_func, scale=scale, upsample=upsample)
-
+   
     info = pd.read_csv(info)  # Info File is read
 
     if ftypes: info = info.loc[info.ftype.isin(ftypes)]

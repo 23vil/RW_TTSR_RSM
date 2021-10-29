@@ -94,13 +94,14 @@ class AdversarialLoss(nn.Module):
             
     def forward(self, fake, real, no_backward = False):
         fake_detach = fake.detach()
-
-        for _ in range(self.gan_k):
+        
+        ###Training of Discrimiator
+        for _ in range(self.gan_k): 
             self.optimizer.zero_grad()
             d_fake = self.discriminator(fake_detach)
             d_real = self.discriminator(real)
             if (self.gan_type.find('WGAN') >= 0):
-                loss_d = (d_fake - d_real).mean()
+                loss_d = (d_fake - d_real).mean() # E[ D(x^) - D(x) ] -----x^~generator_Distribution ,     x~real_Distribution
                 if self.gan_type.find('GP') >= 0:
                     epsilon = torch.rand(real.size(0), 1, 1, 1).to(self.device)
                     epsilon = epsilon.expand(real.size())
@@ -128,8 +129,10 @@ class AdversarialLoss(nn.Module):
             if not no_backward:
                 loss_d.backward()
                 self.optimizer.step()
-
-        d_fake_for_g = self.discriminator(fake)
+                
+                
+        ###calculate generator (TTSR) loss
+        d_fake_for_g = self.discriminator(fake) 
         if (self.gan_type.find('WGAN') >= 0):
             loss_g = -d_fake_for_g.mean()
         elif (self.gan_type == 'GAN'):

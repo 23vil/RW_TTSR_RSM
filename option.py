@@ -42,7 +42,7 @@ parser.add_argument('--gray_transform', type=str2bool, default='False',
 ### reference selection model settings
 parser.add_argument('--reference_dir', type=str, default='/home/ps815691/datasets/ReferenceImages',
                     help='Directory of reference images')
-parser.add_argument('--NumbRef', type=int, default=3,
+parser.add_argument('--NumbRef', type=int, default=500,
                     help='Number of available ReferenceImages')
 #parser.add_argument('--refTrain', type=str2bool, default='False',
 #                    help='True: Train only Reference Selection Model, False: Train TTSR and RSM')

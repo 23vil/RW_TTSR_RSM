@@ -179,21 +179,16 @@ class TestSet(Dataset):
         return out
 
     def __getitem__(self, idx):
-        croper = RandomCrop(self.args) #initialize RandomCrop
         ### HR
         HR = imread(self.HR_list[idx])
         LR = imread(self.LR_list[idx])
         if self.args.debug:
             box = self.box[idx]
             srcFile = self.srcFile[idx]
-        
-        #HRpre = croper(HRpre) #Take a Random 160 x 160 Crop
-
+            
         HR = np.array([HR, HR, HR]).transpose(1,2,0) #make RGB image from greyscale imput----- Solve differently later!
         LR = np.array([LR, LR, LR]).transpose(1,2,0)
-        #HR = imread(self.input_list[idx])
-        #HR = HR.transforms.RandomCrop((160,160,3), padding=None, pad_if_needed=False, fill=0, padding_mode='constant')
-        #HR = np.array(Image.fromarray(HR).resize((160, 160), Image.BICUBIC))
+        
         
         h, w = HR.shape[:2]
         h, w = h//4*4, w//4*4

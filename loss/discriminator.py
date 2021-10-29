@@ -51,12 +51,11 @@ class Discriminator(nn.Module): # inherits from nn.Module = Base class for all n
         
         x = self.LReLU11(self.fc1(x))
         x = self.fc2(x)
-        
         return x
 
 
-if __name__ == '__main__':
-    model = discriminator()
-    x = torch.ones(1, 3, 2048, 2048) # 3*2048*2048 --> change for different pixel size!
-    out = model(x)
-    print (out.size())
+#if __name__ == '__main__':
+#    model = discriminator()
+#    x = torch.ones(1, 3, 2048, 2048) # 3*2048*2048 --> change for different pixel size!
+#    out = model(x)
+#    print (out.size())

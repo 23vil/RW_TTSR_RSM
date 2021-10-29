@@ -74,8 +74,8 @@ if __name__ == '__main__':
     else:       ##Train new model from scratch
         for epoch in range(1, args.num_init_epochs+1):
             t.train(current_epoch=epoch, is_init=True)
-            #if (epoch % args.val_every == 0):
-            #    t.evaluate(current_epoch=epoch)
+            if (epoch % args.val_every == 0):
+                t.evaluate(current_epoch=epoch, is_init=True)
         for epoch in range(1, args.num_epochs+1):
             t.train(current_epoch=epoch, is_init=False)
             t.TotLossPlotter.write(args.save_dir)

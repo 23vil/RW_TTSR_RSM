@@ -1,4 +1,7 @@
+*.png
+*.tif
 dataset/__pycache__/*
+eval/
 loss/__pycache__/*
 *.log
 *.pyc
