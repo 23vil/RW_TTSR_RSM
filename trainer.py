@@ -179,7 +179,6 @@ class Trainer():
                         
             #Transferal Perceptual Loss
                 if ('tpl_loss' in self.loss_all):
-                    #print(self.model.module.LTE.state_dict().keys()) #--- State_dict okay here, but only one. .. type(LTE( = dataparallel... with two devices 0 & 1...
                     sr_lv1, sr_lv2, sr_lv3 = self.model(sr=sr) # bezieht sr_lv1, sr_lv2, sr_lv3 aus LTE_copy
                     tpl_loss = self.args.tpl_w * self.loss_all['tpl_loss'](sr_lv3, sr_lv2, sr_lv1, 
                         S, T_lv3, T_lv2, T_lv1)
@@ -190,7 +189,7 @@ class Trainer():
                         
             #Adversarial Loss
                 if ('adv_loss' in self.loss_all):
-                    adv_loss = self.args.adv_w * self.loss_all['adv_loss'](sr, hr)
+                    adv_loss = self.args.adv_w * self.loss_all['adv_loss'](sr, hr,learningrate=self.optimizer.param_groups[0]['lr'])
                     loss += adv_loss
                     if (is_print):
                         self.logger.info( 'adv_loss: %.10f' %(adv_loss.item()) )  
@@ -201,14 +200,9 @@ class Trainer():
                 self.TotLossPlotter.store([current_epoch-1,i_batch, loss.item()])
             
             #Backpropagate
-            #print(self.model.RefSelector.RSel.fc.weight.grad)
-            loss.backward()
-            #refID.mean().backward(loss)
+            loss.backward()           
             self.optimizer.step()
             self.scheduler.step()
-            #print(self.model.RefSelector.parameters())
-            #for param in self.model.RefSelector.parameters():
-            #    print(param.grad)
             self.updateRefVectorDict()
             
         ##Save Model
@@ -271,7 +265,6 @@ class Trainer():
                     del reftmp
                     del ref_srtmp
                     
-                    print(i_batch)
                     ###Compute SR
                     sr, S, T_lv3, T_lv2, T_lv1 = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr)
                     
@@ -413,7 +406,7 @@ class Trainer():
                     per_loss = per_loss / cnt
                     tpl_loss = tpl_loss / cnt
                     adv_loss = adv_loss / cnt
-                    val_loss =1# rec_loss + per_loss + tpl_loss + adv_loss 
+                    val_loss = rec_loss + per_loss + tpl_loss + adv_loss 
                 else: val_loss = rec_loss
                 
               

@@ -35,12 +35,12 @@ class TPerceptualLoss(nn.Module):
         self.use_S = use_S
         self.type = type
 
-    def gram_matrix(self, x):
-        b, ch, h, w = x.sizle()
-        f = x.view(b, ch, h*w)
-        f_T = f.transpose(1, 2)
-        G = f.bmm(f_T) / (h * w * ch)
-        return G
+    #def gram_matrix(self, x):
+    #    b, ch, h, w = x.sizle()
+    #    f = x.view(b, ch, h*w)
+    #    f_T = f.transpose(1, 2)
+    #    G = f.bmm(f_T) / (h * w * ch)
+    #    return G
 
     def forward(self, map_lv3, map_lv2, map_lv1, S, T_lv3, T_lv2, T_lv1):
         ### S.size(): [N, 1, h, w]
@@ -67,10 +67,11 @@ class TPerceptualLoss(nn.Module):
 
 class AdversarialLoss(nn.Module):
     def __init__(self, logger, device, args, use_cpu=False, num_gpu=1, gan_type='WGAN_GP', gan_k=1, 
-        lr_dis=1e-4, train_crop_size=32):#crop size default value,but defined in
+        lr_dis_fkt=2, train_crop_size=32):#crop size default value,but defined in
         super(AdversarialLoss, self).__init__()
         self.logger = logger
         self.args = args
+        self.lr_dis_fkt = lr_dis_fkt
         self.gan_type = gan_type
         self.gan_k = gan_k
         self.device = device #torch.device('cpu' if use_cpu else 'cuda')
@@ -80,7 +81,7 @@ class AdversarialLoss(nn.Module):
         if (gan_type in ['WGAN_GP', 'GAN']):
             self.optimizer = optim.Adam(
                 self.discriminator.parameters(),
-                betas=(0, 0.9), eps=1e-8, lr=lr_dis
+                betas=(0, 0.9), eps=1e-8, lr=self.args.lr_base*lr_dis_fkt
             )
         else:
             raise SystemExit('Error: no such type of GAN!')
@@ -93,11 +94,14 @@ class AdversarialLoss(nn.Module):
         #     self.discriminator.load_state_dict(D_state_dict['D'])
         #     self.optimizer.load_state_dict(D_state_dict['D_optim'])
             
-    def forward(self, fake, real, no_backward = False):
+    def forward(self, fake, real,  learningrate=1e-4, no_backward = False):
+        for g in self.optimizer.param_groups:
+            g['lr'] = learningrate*self.lr_dis_fkt
+
         fake_detach = fake.detach()
-        
+        #self.optimizer.param_groups[0]['lr']
         ###Training of Discrimiator
-        if not self.args.eval and not self.args.test or not no_backward:
+        if not (self.args.eval or self.args.test or no_backward):
             for _ in range(self.gan_k): 
                 self.optimizer.zero_grad()
                 d_fake = self.discriminator(fake_detach)
@@ -160,6 +164,6 @@ def get_loss_dict(args, logger, device):
         loss['tpl_loss'] = TPerceptualLoss(use_S=args.tpl_use_S, type=args.tpl_type)#If Reconstruction loss weight smaller than 1e-8 --> System Error
     if (abs(args.adv_w - 0) > 1e-8):
         loss['adv_loss'] = AdversarialLoss(logger=logger,args=args, device=device, use_cpu=args.cpu, num_gpu=args.num_gpu, 
-            gan_type=args.GAN_type, gan_k=args.GAN_k, lr_dis=args.lr_rate_dis,
+            gan_type=args.GAN_type, gan_k=args.GAN_k, lr_dis_fkt=args.lr_rate_dis_fkt,
             train_crop_size=args.train_crop_size)  # Reconstruction loss weight smaller than 1e-8 --> System Error
     return loss

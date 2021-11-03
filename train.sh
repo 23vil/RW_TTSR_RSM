@@ -15,14 +15,14 @@ python main.py --save_dir /work/ps815691/trainingResults/$save_folder/\
                --lr_rate 1e-6\
                --lr_max 6.4e-5\
                --lr_base 1e-8\
-               --lr_rate_dis $1\
+               --lr_rate_dis_fkt $1\
                --lr_rate_lte 1e-4\
                --rec_w 1e-3\
                --per_w $2\
                --tpl_w $3\
                --adv_w $4\
                --GAN_k 10\
-               --tpl_use_S True\
+               --tpl_use_S False\
                --batch_size 10\
                --num_init_epochs 0\
                --num_epochs 50\

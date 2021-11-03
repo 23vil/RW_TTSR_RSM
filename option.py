@@ -100,7 +100,7 @@ parser.add_argument('--lr_base', type=float, default=1e-4,
                     help='Lower boundary Learning rate cyclicLR')
 parser.add_argument('--lr_max', type=float, default=1e-4,
                     help='Lower boundary Learning rate cyclicLR')
-parser.add_argument('--lr_rate_dis', type=float, default=1e-4,
+parser.add_argument('--lr_rate_dis_fkt', type=float, default=2,
                     help='Learning rate of discriminator')
 parser.add_argument('--lr_rate_lte', type=float, default=1e-5,
                     help='Learning rate of LTE')
