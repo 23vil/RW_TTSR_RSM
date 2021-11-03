@@ -18,20 +18,11 @@ class TTSR(nn.Module):
         self.LTE      = LTE.LTE(requires_grad=True) # create LTE object from model/LTE.py
         self.LTE_copy = LTE.LTE(requires_grad=False) ### used in transferal perceptual loss #second LTE object
         self.SearchTransfer = SearchTransfer.SearchTransfer() #object from model/SearchTransfer.py
-        #if not self.args.seperateRefLoss:
         self.device = device
         self.RefSelector = RefSelector.RefSelector(self.args, device)
 
 
-    def forward(self, lr=None, lrsr=None, ref=None, refsr=None, sr=None, no_backward=False, relevance = False):
-        #lr [N,RGB/gray,H,W]
-        #lrsr [N,RGB/gray,H*scale,W*scale]
-        #ref &refsr [N,RGB/gray, Hcrop, Wcrop]
-        #if sr == "test":
-            #print("LTE "+str(torch.cuda.current_device())+"    "+str(self.LTE.state_dict().keys()))
-            #print("LTE_Copy "+str(torch.cuda.current_device())+"    "+str(self.LTE_copy.state_dict().keys()))
-            #return None
-            
+    def forward(self, lr=None, lrsr=None, ref=None, refsr=None, sr=None, no_backward=False, relevance = False):            
         if (type(sr) != type(None)): #if sr is not None - but is None by default
             ### used in transferal perceptual loss
             if not no_backward:
@@ -41,19 +32,15 @@ class TTSR(nn.Module):
             else:
                 sr_lv1, sr_lv2, sr_lv3 = self.LTE((sr + 1.) / 2.)
             return sr_lv1, sr_lv2, sr_lv3
-        #if self.args.seperateRefLoss and relevance: #Calculate perceptual RSM - Loss during RSM-Pretraining
-        #    with torch.no_grad():
-        #        _, _, lrsr_lv3  = self.LTE((lrsr.detach() + 1.) / 2.)       
-        #        _, _, refsr_lv3 = self.LTE((refsr.detach() + 1.) / 2.)
-        #        ref_lv1, ref_lv2, ref_lv3 = self.LTE((ref.detach() + 1.) / 2.)
-        #        _, _, _, _, RelevanceTensor = self.SearchTransfer(lrsr_lv3, refsr_lv3, ref_lv1, ref_lv2, ref_lv3)                
-        #    return RelevanceTensor
         
         
         _, _, lrsr_lv3  = self.LTE((lrsr.detach() + 1.) / 2.) #.detach() is similar to no_grad - lrsr is argument of forward - arguments are defined in trainer.py lines 69 - 75       
         _, _, refsr_lv3 = self.LTE((refsr.detach() + 1.) / 2.)
         ref_lv1, ref_lv2, ref_lv3 = self.LTE((ref.detach() + 1.) / 2.)
+        #GPUtil.showUtilization()
         S, T_lv3, T_lv2, T_lv1, _ = self.SearchTransfer(lrsr_lv3, refsr_lv3, ref_lv1, ref_lv2, ref_lv3)
+        del ref_lv1
+        del ref_lv2
+        del ref_lv3
         sr = self.MainNet(lr, S, T_lv3, T_lv2, T_lv1)
-
         return sr, S, T_lv3, T_lv2, T_lv1

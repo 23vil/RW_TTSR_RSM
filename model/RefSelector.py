@@ -13,13 +13,13 @@ class RefSelector(nn.Module):
         super(RefSelector, self).__init__()
         self.args = args
         self.device = device
-        self.model = models.vgg19(pretrained=True)
-        self.Img2Vec = Img2Vec(device=self.device, model=self.model)
+        self.LTEmodel = models.vgg19(pretrained=True)
+        self.Img2Vec = Img2Vec(LTEmodel=self.LTEmodel)
         self.RefVectorDict = {}
         self.LTE = []       
         for i in range (13):
-            self.model.features[i] = nn.Identity()
-        self.model.eval()
+            self.LTEmodel.features[i] = nn.Identity()
+        self.LTEmodel.eval()
         self.cos = torch.nn.CosineSimilarity(dim=-1, eps=1e-08)
         
     def updateRefVectorDict(self, RefSr, RefID, LTE):
@@ -44,19 +44,18 @@ class RefSelector(nn.Module):
         return MaxSimIDs   
 
 class Img2Vec():
-    def __init__(self, device, model, layer='default', layer_output_size=512):
+    def __init__(self, LTEmodel, layer='default', layer_output_size=512):
         """ Img2Vec
         :param cuda: If set to True, will run forward pass on GPU
         :param model: String name of requested model
         :param layer: String or Int depending on model.  See more docs: https://github.com/christiansafka/img2vec.git
         :param layer_output_size: Int depicting the output size of the requested layer
         """
-        self.device = device
         self.layer_output_size = layer_output_size
-        self.model = model
+        self.LTEmodel = LTEmodel
         self.extraction_layer = self._get_model_and_layer(layer)
-        self.model = self.model.to(self.device)
-        self.model.eval()
+        
+        self.LTEmodel.eval()
 
     def get_vec(self, img, tensor=True):
         """ Get vector embedding from PIL image
@@ -70,7 +69,7 @@ class Img2Vec():
                 my_embedding.copy_(o.data)
             h = self.extraction_layer.register_forward_hook(copy_data)
             with torch.no_grad():
-                h_x = self.model(img)
+                h_x = self.LTEmodel(img)
             h.remove()
             return my_embedding
 
@@ -80,7 +79,7 @@ class Img2Vec():
                 my_embedding.copy_(o.data)
             h = self.extraction_layer.register_forward_hook(copy_data)
             with torch.no_grad():
-                h_x = self.model(img)
+                h_x = self.LTEmodel(img)
             h.remove()
             return my_embedding
 
@@ -93,8 +92,8 @@ class Img2Vec():
         # VGG-19
         
         if layer == 'default':
-            layer = self.model.classifier[-4]
-            self.layer_output_size = self.model.classifier[-4].in_features # should be 4096
+            layer = self.LTEmodel.classifier[-4]
+            self.layer_output_size = self.LTEmodel.classifier[-4].in_features # should be 4096
         else:               
-            layer = self.model.classifier[-layer]
+            layer = self.LTEmodel.classifier[-layer]
         return layer

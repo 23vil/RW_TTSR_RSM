@@ -31,25 +31,21 @@ def free_device(args): #Check for free device and return respective device, also
 if __name__ == '__main__':
     ### make save_dir
     _logger = mkExpDir(args)
-
     ### dataloader of training set and testing set
     _dataloader = dataloader.get_dataloader(args) #if (not args.test) else None
-
     ### device and model
-    device = free_device(args)
-    _model = TTSR.TTSR(args, device).to(device)        
+    device = torch.device('cpu' if args.cpu else 'cuda')
+    _model = TTSR.TTSR(args, device)#.to(device)
+    _model = _model.to(device)
     if ((not args.cpu) and (args.num_gpu > 1)):
-        _model = nn.DataParallel(_model, list(range(args.num_gpu)))       
+        _model = nn.DataParallel(_model, list(range(args.num_gpu))).to(device)       
         #_model = DistributedDataParallel(_model, list(range(args.num_gpu)))
-
     ### loss
     _loss_all = get_loss_dict(args, _logger, device) #defined in loss/loss.pt
     
     
-    
     ### trainer initialization
     t = Trainer(args, device,  _logger, _dataloader, _model, _loss_all)
-    
     ### test / eval / train
     if (args.test):      ##Test Mode
         t.load(model_path=args.model_path)
@@ -74,6 +70,8 @@ if __name__ == '__main__':
     else:       ##Train new model from scratch
         for epoch in range(1, args.num_init_epochs+1):
             t.train(current_epoch=epoch, is_init=True)
+            t.TotLossPlotter.write(args.save_dir, is_init=True)
+            t.RecLossPlotter.write(args.save_dir, is_init=True)
             if (epoch % args.val_every == 0):
                 t.evaluate(current_epoch=epoch, is_init=True)
         for epoch in range(1, args.num_epochs+1):

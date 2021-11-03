@@ -49,7 +49,7 @@ class plotter:
         self.data = np.append(self.data,data[2])
         self.batch = np.append(self.batch,data[1])
         self.epoch = np.append(self.epoch,data[0])
-    def write(self, directory): 
+    def write(self, directory, is_init = False): 
         # Data for plotting
         font = {'weight' : 'normal',
         'size'   : 11.5}
@@ -64,8 +64,10 @@ class plotter:
 
         ax.set_xticklabels(np.unique(self.epoch))
         ax.grid()
-
-        fig.savefig(os.path.join(directory,str(self.losstype)+'.png'))
+        if not is_init:
+            fig.savefig(os.path.join(directory,str(self.losstype)+'.png'))
+        else:
+            fig.savefig(os.path.join(directory,str(self.losstype)+'_init.png'))
         #plt.show()
     def debug(self):
         try:

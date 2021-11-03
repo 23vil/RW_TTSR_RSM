@@ -95,15 +95,19 @@ parser.add_argument('--beta2', type=float, default=0.999,
 parser.add_argument('--eps', type=float, default=1e-8,
                     help='The eps in Adam optimizer')
 parser.add_argument('--lr_rate', type=float, default=1e-4,
-                    help='Learning rate')
+                    help='Learning rate in cas Step_LR is activated')
+parser.add_argument('--lr_base', type=float, default=1e-4,
+                    help='Lower boundary Learning rate cyclicLR')
+parser.add_argument('--lr_max', type=float, default=1e-4,
+                    help='Lower boundary Learning rate cyclicLR')
 parser.add_argument('--lr_rate_dis', type=float, default=1e-4,
                     help='Learning rate of discriminator')
 parser.add_argument('--lr_rate_lte', type=float, default=1e-5,
                     help='Learning rate of LTE')
-parser.add_argument('--decay', type=float, default=999999,
-                    help='Learning rate decay type')
+parser.add_argument('--decay', type=float, default=1,
+                    help='Learning rate decay type(STepLR)')
 parser.add_argument('--gamma', type=float, default=0.5,
-                    help='Learning rate decay factor for step decay')
+                    help='Learning rate decay factor for step decay(STepLR)')
 
 ### training setting
 parser.add_argument('--batch_size', type=int, default=1,

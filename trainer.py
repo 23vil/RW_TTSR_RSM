@@ -51,7 +51,7 @@ class Trainer():
         if ((not self.args.cpu) and (self.args.num_gpu > 1)):
             self.vgg19 = nn.DataParallel(self.vgg19, list(range(self.args.num_gpu)))
             #self.vgg19 = DistributedDataParallel(self.vgg19, list(range(self.args.num_gpu)))
-            
+        self.BatchNumber = len(self.dataloader['train'])
         self.params = [
             {"params": filter(lambda p: p.requires_grad, self.model.MainNet.parameters() if 
             args.num_gpu==1 else self.model.module.MainNet.parameters()),
@@ -62,13 +62,15 @@ class Trainer():
             "lr": args.lr_rate_lte
             }
         ]
-        self.optimizer = optim.Adam(self.params, betas=(args.beta1, args.beta2), eps=args.eps)
-        self.scheduler = optim.lr_scheduler.StepLR(
-            self.optimizer, step_size=self.args.decay, gamma=self.args.gamma)
-        #if self.args.seperateRefLoss:
-        #    self.RefOptimizer = optim.Adam(self.RefSelModel.RSel.parameters(), betas=(args.beta1, args.beta2), eps=args.eps)
-        #    self.RefScheduler = optim.lr_scheduler.StepLR(
-        #        self.RefOptimizer, step_size=self.args.decay, gamma=self.args.gamma)
+        if not self.args.eval and not self.args.test:
+            self.optimizer = optim.AdamW(self.params, betas=(args.beta1, args.beta2), eps=args.eps)
+            #self.scheduler = optim.lr_scheduler.StepLR(
+                #self.optimizer, step_size=self.args.decay, gamma=self.args.gamma)
+            self.scheduler = optim.lr_scheduler.CyclicLR(self.optimizer, base_lr=self.args.lr_base, max_lr=self.args.lr_max, cycle_momentum=False, step_size_up=int(round(2*self.BatchNumber/3)), step_size_down=self.BatchNumber-int(round(2*self.BatchNumber/3)))
+            #if self.args.seperateRefLoss:
+            #    self.RefOptimizer = optim.Adam(self.RefSelModel.RSel.parameters(), betas=(args.beta1, args.beta2), eps=args.eps)
+            #    self.RefScheduler = optim.lr_scheduler.StepLR(
+            #        self.RefOptimizer, step_size=self.args.decay, gamma=self.args.gamma)
         self.max_psnr = 0.
         self.max_psnr_epoch = 0
         self.max_ssim = 0.
@@ -80,7 +82,7 @@ class Trainer():
         for RefID in range(self.args.NumbRef):
             Refsr = self.dataloader['ref'][RefID]['Ref_sr'].unsqueeze(dim=0).to(self.device)
             self.model.RefSelector.updateRefVectorDict(Refsr, RefID, self.model.LTE)
-    
+            
     def load(self, model_path=None):
         if (model_path):
             self.logger.info('load_model_path: ' + model_path)
@@ -105,6 +107,7 @@ class Trainer():
         
         self.model.train() #self.model is TTSR.py from model folder
         
+        #self.scheduler.step()
         if (not is_init):
             self.scheduler.step()
         self.logger.info('Current epoch learning rate: %e' %(self.optimizer.param_groups[0]['lr']))
@@ -160,7 +163,7 @@ class Trainer():
                 self.logger.info( ('init ' if is_init else '') + 'epoch: ' + str(current_epoch) + 
                     '\t batch: ' + str(i_batch+1) )
                 self.logger.info( 'rec_loss: %.10f' %(rec_loss.item()) )
-                self.RecLossPlotter.store([current_epoch,i_batch, rec_loss.item()])
+                self.RecLossPlotter.store([current_epoch-1,i_batch, rec_loss.item()])
                 
             #Perceptual Loss    
             if (not is_init):
@@ -172,7 +175,7 @@ class Trainer():
                     loss += per_loss
                     if (is_print):
                         self.logger.info( 'per_loss: %.10f' %(per_loss.item()) )
-                        self.PerLossPlotter.store([current_epoch,i_batch, per_loss.item()])
+                        self.PerLossPlotter.store([current_epoch-1,i_batch, per_loss.item()])
                         
             #Transferal Perceptual Loss
                 if ('tpl_loss' in self.loss_all):
@@ -183,7 +186,7 @@ class Trainer():
                     loss += tpl_loss
                     if (is_print):
                         self.logger.info( 'tpl_loss: %.10f' %(tpl_loss.item()) )
-                        self.TplLossPlotter.store([current_epoch,i_batch, tpl_loss.item()])
+                        self.TplLossPlotter.store([current_epoch-1,i_batch, tpl_loss.item()])
                         
             #Adversarial Loss
                 if ('adv_loss' in self.loss_all):
@@ -191,21 +194,22 @@ class Trainer():
                     loss += adv_loss
                     if (is_print):
                         self.logger.info( 'adv_loss: %.10f' %(adv_loss.item()) )  
-                        self.AdvLossPlotter.store([current_epoch,i_batch, adv_loss.item()])
+                        self.AdvLossPlotter.store([current_epoch-1,i_batch, adv_loss.item()])
             #Total Loss
             if (is_print):    
                 self.logger.info( 'total_loss: %.10f' %(loss.item()) )
-                self.TotLossPlotter.store([current_epoch,i_batch, loss.item()])
+                self.TotLossPlotter.store([current_epoch-1,i_batch, loss.item()])
             
             #Backpropagate
             #print(self.model.RefSelector.RSel.fc.weight.grad)
             loss.backward()
             #refID.mean().backward(loss)
             self.optimizer.step()
+            self.scheduler.step()
             #print(self.model.RefSelector.parameters())
             #for param in self.model.RefSelector.parameters():
             #    print(param.grad)
-            
+            self.updateRefVectorDict()
             
         ##Save Model
         if ((not is_init) and current_epoch % self.args.save_every == 0):
@@ -223,7 +227,9 @@ class Trainer():
                 (('SearchNet' not in key) and ('_copy' not in key))}
             model_name = self.args.save_dir.strip('/')+'/model/init-model_'+str(current_epoch).zfill(5)+'.pt'
             torch.save(model_state_dict, model_name)
-            
+         
+         
+         
     def evaluate(self, current_epoch=0, is_init=False):
         
         self.logger.info('Epoch ' + str(current_epoch) + ' evaluation process...')
@@ -247,12 +253,13 @@ class Trainer():
                         for i, boxItem in enumerate(box):
                             box[i] = boxItem.item()                        
                     sample_batched = self.prepare(sample_batched)
+                    
                     lr = sample_batched['LR']
                     lr_sr = sample_batched['LR_sr']
                     hr = sample_batched['HR']
                     
-                    refID = self.model.RefSelector(lr)
-                
+                    ### Refernce Selection
+                    refID = self.model.RefSelector(lr)                
                     reftmp = []
                     ref_srtmp = []
                     for ID in refID:
@@ -260,27 +267,37 @@ class Trainer():
                         ref_srtmp.append(self.dataloader['ref'][ID]['Ref_sr'])
                     ref = torch.stack((reftmp),0).to(self.device)
                     ref_sr = torch.stack((ref_srtmp),0).to(self.device)
+                    del refID
+                    del reftmp
+                    del ref_srtmp
                     
-
+                    print(i_batch)
+                    ###Compute SR
                     sr, S, T_lv3, T_lv2, T_lv1 = self.model(lr=lr, lrsr=lr_sr, ref=ref, refsr=ref_sr)
                     
+                    ###Transform SR to gray
                     if (self.args.gray_transform):
                         sr = self.transformGray(sr)
-                        
+                    
+                    #print(adv_loss.element_size()*adv_loss.nelement())
+                    
                     if (self.args.eval_save_results):
                         sr_save = (sr+1.) * 127.5
                         sr_save = np.transpose(sr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8) # squeeze delets all 1 values --- round() rounds to closest integer -- .cpu() moves object to cpu ---.numpy transforms object to numpy array--- transform to np.unit8 type
                         imsave(os.path.join(self.args.save_dir, 'save_results', str(i_batch).zfill(5)+'.tif'), sr_save)
                         
                     ### calculate psnr and ssim
+                    
                     _psnr, _ssim = calc_psnr_and_ssim(sr.detach(), hr.detach())
-                    psnr += _psnr
-                    ssim += _ssim
+                    psnr += _psnr #dtype float
+                    ssim += _ssim #dtype float
                     
                     ###calc loss
                     ##Rec Loss
                     rec_loss_tmp = self.args.rec_w * self.loss_all['rec_loss'](sr, hr) #rec_w = weight of reconstruction loss - defined in train.sh (also default value in option.py) ---- loss_all defined in loss/loss.pt by "get_loss_dict" - change variable name in main.py
-                    rec_loss += rec_loss_tmp
+                    rec_loss += rec_loss_tmp #both stay at 4 byte
+                    rec_loss_tmp = float(rec_loss_tmp)
+                    
                     
                     if not is_init:
                         
@@ -291,28 +308,31 @@ class Trainer():
                             
                         per_loss_tmp = self.args.per_w * self.loss_all['per_loss'](sr_relu5_1, hr_relu5_1)
                         per_loss += per_loss_tmp
+                        per_loss_tmp =float(per_loss_tmp)
                         
                         ##Tpl Loss
                         sr_lv1, sr_lv2, sr_lv3 = self.model(sr=sr, no_backward = True)
                         
                         tpl_loss_tmp = self.args.tpl_w * self.loss_all['tpl_loss'](sr_lv3, sr_lv2, sr_lv1, S, T_lv3, T_lv2, T_lv1)
                         tpl_loss += tpl_loss_tmp
+                        tpl_loss_tmp = float(tpl_loss_tmp)
                         
                         ##Adv Loss
-                        with torch.enable_grad():
-                            adv_loss_tmp = self.args.adv_w * self.loss_all['adv_loss'](sr, hr, no_backward = True)
-                            adv_loss += adv_loss_tmp
+                        #with torch.enable_grad():
+                        adv_loss_tmp = self.args.adv_w * self.loss_all['adv_loss'](sr, hr, no_backward = True)
+                        adv_loss += adv_loss_tmp #both stay at 4 bytes
+                        adv_loss_tmp = float(adv_loss_tmp)
                         
                         #Store Losses for Loss-HeatMap generation
                         if self.args.debug:
                             self.evalLossesDf = self.evalLossesDf.append({
                                                                         'Box':box ,
                                                                         'srcFile':srcFile,
-                                                                        'TotLoss':rec_loss_tmp.cpu() + per_loss_tmp.cpu() + tpl_loss_tmp.cpu() + adv_loss_tmp.cpu(),
-                                                                        'RecLoss':rec_loss_tmp.cpu(),
-                                                                        'PerLoss':per_loss_tmp.cpu(),
-                                                                        'TplLoss':tpl_loss_tmp.cpu(),
-                                                                        'AdvLoss':adv_loss_tmp.cpu()},ignore_index=True)
+                                                                        'TotLoss':rec_loss_tmp + per_loss_tmp + tpl_loss_tmp + adv_loss_tmp,
+                                                                        'RecLoss':rec_loss_tmp,
+                                                                        'PerLoss':per_loss_tmp,
+                                                                        'TplLoss':tpl_loss_tmp,
+                                                                        'AdvLoss':adv_loss_tmp},ignore_index=True)
                     else:
                         if self.args.debug:
                             self.evalLossesDf = self.evalLossesDf.append({
@@ -363,7 +383,7 @@ class Trainer():
                                 heatMaps[image][i] = np.divide(heatMaps[image][i],heatCounter[image][i])
                                 fig, ax = plt.subplots(figsize=(10,10))
                                 sns.set(rc={'axes.facecolor':'gray', 'figure.facecolor':'white',"font.size":11,"axes.titlesize":11,"axes.labelsize":11})
-                                im = plt.imread(os.path.join("/home/ps815691/git/PSSR/datasources/fixed/IMMresVar1024-4096/lr/valid/",image))
+                                im = plt.imread(os.path.join("/home/ps815691/datasources/fixed/IMMresVar1024-4096/lr/valid/",image))
                                 ax = sns.heatmap(heatMaps[image][i], linewidth=0, linecolor='black', cmap='jet', xticklabels = 200, yticklabels = 200, cbar_kws={"shrink": 0.75})#, vmin= 23)
                                 ax = ax.imshow(im, extent=[0, 1024, 0, 1024])
                                 plt.savefig(os.path.join(self.args.save_dir,str(current_epoch+1)+"_"+image[-6:-4]+"_"+lossName+'.png'))
@@ -374,23 +394,26 @@ class Trainer():
                                 heatMaps[image][i] = np.divide(heatMaps[image][i],heatCounter[image][i])
                                 fig, ax = plt.subplots(figsize=(10,10))
                                 sns.set(rc={'axes.facecolor':'gray', 'figure.facecolor':'white',"font.size":11,"axes.titlesize":11,"axes.labelsize":11})
-                                im = plt.imread(os.path.join("/home/ps815691/git/PSSR/datasources/fixed/IMMresVar1024-4096/lr/valid/",image))
+                                im = plt.imread(os.path.join("/home/ps815691/datasources/fixed/IMMresVar1024-4096/lr/valid/",image))
                                 ax = sns.heatmap(heatMaps[image][i], linewidth=0, linecolor='black', cmap='jet', xticklabels = 200, yticklabels = 200, cbar_kws={"shrink": 0.75})#, vmin= 23)
                                 ax = ax.imshow(im, extent=[0, 1024, 0, 1024])
-                                plt.savefig(os.path.join(self.args.save_dir,str(current_epoch+1)+"_"+image[-6:-4]+"_"+lossName+'.png'))
+                                plt.savefig(os.path.join(self.args.save_dir,str(current_epoch+1)+"_init_"+image[-6:-4]+"_"+lossName+'.png'))
                                 #plt.close(fig)
-                    
-                    self.evalLossesDf.to_csv(os.path.join(self.args.save_dir,"lossheatMap.csv"))    
+                    if is_init:
+                        self.evalLossesDf.to_csv(os.path.join(self.args.save_dir,str(current_epoch)+"_init-epoch_lossheatMap.csv"))
+                    else:
+                        self.evalLossesDf.to_csv(os.path.join(self.args.save_dir,str(current_epoch)+"_epoch_lossheatMap.csv"))    
                         
 
                         
                 ###average & print losses and calc total val_loss
+                #print(rec_loss) sometimes NAN
                 rec_loss = rec_loss / cnt 
                 if not is_init:
                     per_loss = per_loss / cnt
                     tpl_loss = tpl_loss / cnt
                     adv_loss = adv_loss / cnt
-                    val_loss = rec_loss + per_loss + tpl_loss + adv_loss 
+                    val_loss =1# rec_loss + per_loss + tpl_loss + adv_loss 
                 else: val_loss = rec_loss
                 
               
@@ -466,7 +489,7 @@ class Trainer():
     def test(self):
         self.logger.info('Test process...')
         self.logger.info('lr path:     %s' %(self.args.lr_path))
-        self.logger.info('ref path:    %s' %(self.args.ref_path))
+        #self.logger.info('ref path:    %s' %(self.args.ref_path))
         
         self.model.eval()
         
