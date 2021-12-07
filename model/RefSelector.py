@@ -23,9 +23,10 @@ class RefSelector(nn.Module):
         self.cos = torch.nn.CosineSimilarity(dim=-1, eps=1e-08)
         
     def updateRefVectorDict(self, RefSr, RefID, LTE):
-        self.LTE = LTE
-        _ ,_ , LTEref = self.LTE(RefSr)
-        self.RefVectorDict[RefID] = self.Img2Vec.get_vec(LTEref)
+        with torch.no_grad():
+            self.LTE = LTE
+            _ ,_ , LTEref = self.LTE(RefSr)
+            self.RefVectorDict[RefID] = self.Img2Vec.get_vec(LTEref)
         
     def forward(self, LR):
         _, _, LTElr = self.LTE(LR)

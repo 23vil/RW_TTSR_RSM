@@ -25,8 +25,8 @@ class SearchTransfer(nn.Module):
         refsr_lv3_unfold = F.unfold(refsr_lv3, kernel_size=(3, 3), padding=1)
         refsr_lv3_unfold = refsr_lv3_unfold.permute(0, 2, 1)
 
-        refsr_lv3_unfold = F.normalize(refsr_lv3_unfold, dim=2) # [N, Hr*Wr, C*k*k] #N = Batchsize
-        lrsr_lv3_unfold  = F.normalize(lrsr_lv3_unfold, dim=1) # [N, C*k*k, H*W]
+        refsr_lv3_unfold = F.normalize(refsr_lv3_unfold, dim=2) # [N, Hr*Wr, C*k*k] #N = Batchsize #C = Number of Channels #k = Kernel-Size in unfold
+        lrsr_lv3_unfold  = F.normalize(lrsr_lv3_unfold, dim=1) # [N, C*k*k, H*W] 
 
         R_lv3 = torch.bmm(refsr_lv3_unfold, lrsr_lv3_unfold) #[N, Hr*Wr, H*W] #batch matrix multiplication --> refsr*lrsr  ("Relevance Embedding" in Graph)
         del refsr_lv3_unfold

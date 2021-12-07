@@ -35,13 +35,6 @@ class TPerceptualLoss(nn.Module):
         self.use_S = use_S
         self.type = type
 
-    #def gram_matrix(self, x):
-    #    b, ch, h, w = x.sizle()
-    #    f = x.view(b, ch, h*w)
-    #    f_T = f.transpose(1, 2)
-    #    G = f.bmm(f_T) / (h * w * ch)
-    #    return G
-
     def forward(self, map_lv3, map_lv2, map_lv1, S, T_lv3, T_lv2, T_lv1):
         ### S.size(): [N, 1, h, w]
         if (self.use_S):
@@ -79,7 +72,7 @@ class AdversarialLoss(nn.Module):
         if (num_gpu > 1):
             self.discriminator = nn.DataParallel(self.discriminator, list(range(num_gpu)))
         if (gan_type in ['WGAN_GP', 'GAN']):
-            self.optimizer = optim.Adam(
+            self.optimizer = optim.AdamW(
                 self.discriminator.parameters(),
                 betas=(0, 0.9), eps=1e-8, lr=self.args.lr_base*lr_dis_fkt
             )
@@ -88,11 +81,6 @@ class AdversarialLoss(nn.Module):
 
         self.bce_loss = torch.nn.BCELoss().to(self.device)
 
-        # if (D_path):
-        #     self.logger.info('load_D_path: ' + D_path)
-        #     D_state_dict = torch.load(D_path)
-        #     self.discriminator.load_state_dict(D_state_dict['D'])
-        #     self.optimizer.load_state_dict(D_state_dict['D_optim'])
             
     def forward(self, fake, real,  learningrate=1e-4, no_backward = False):
         for g in self.optimizer.param_groups:

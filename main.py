@@ -17,57 +17,62 @@ import torch
 import warnings
 from sys import exit
 warnings.filterwarnings('ignore')
-
-def free_device(args): #Check for free device and return respective device, also considering the option.py configuration (cpu/gpu).
-    if args.num_gpu ==1 :
-        def get_freer_gpu():
-            os.system('nvidia-smi -q -d Memory |grep -A4 GPU|grep Free >tmp')
-            memory_available = [int(x.split()[2]) for x in open('tmp', 'r').readlines()]
-            return np.argmax(memory_available)
-        return torch.device('cpu' if args.cpu else 'cuda:'+str(get_freer_gpu()))
-    else:
-        return torch.device('cpu' if args.cpu else 'cuda')    
+ 
 
 if __name__ == '__main__':
-    ### make save_dir
+    ### Create Save Directory and start training progress logger
     _logger = mkExpDir(args)
-    ### dataloader of training set and testing set
-    _dataloader = dataloader.get_dataloader(args) #if (not args.test) else None
-    ### device and model
+    
+    
+    ### Initialize dataloader of training dataset and testing dataset
+    _dataloader = dataloader.get_dataloader(args) 
+    
+    
+    ### Initialize device and TTSR model
     device = torch.device('cpu' if args.cpu else 'cuda')
     _model = TTSR.TTSR(args, device)#.to(device)
     _model = _model.to(device)
+    
     if ((not args.cpu) and (args.num_gpu > 1)):
         _model = nn.DataParallel(_model, list(range(args.num_gpu))).to(device)       
-        #_model = DistributedDataParallel(_model, list(range(args.num_gpu)))
-    ### loss
+    
+    
+    ### Initialize loss calculation
     _loss_all = get_loss_dict(args, _logger, device) #defined in loss/loss.pt
     
     
-    ### trainer initialization
+    ### trainer.py initialization --> In this file the training, evaluation happens. Also test images are created in here.
     t = Trainer(args, device,  _logger, _dataloader, _model, _loss_all)
-    ### test / eval / train
-    if (args.test):      ##Test Mode
+    
+    
+    
+    ### Start the porgramm (e.g. test / eval / train) = execute one of the blocks below   
+    ##Test Mode - load pretrained model --> then test
+    if (args.test):      
         t.load(model_path=args.model_path)
         t.test()
-    elif (args.eval):   ##Evaluation Mode
+    
+    
+    ##Evaluation Mode - load pretrained model --> then evaluate    
+    elif (args.eval):   
         t.load(model_path=args.model_path)
         t.evaluate()
-    #elif (args.refTrain):       ##Train only Reference Selection Model
-    #    for epoch in range(1, args.num_epochs+1):
-    #        if (args.retrain):
-    #            t.loadRef(ref_model_path=args.ref_model_path)
-    #        t.refTrain()
-    elif (args.retrain):        ##Load pretrained Model and continue training this Model
+    
+    
+    ##Load pretrained Model and continue training this model   
+    elif (args.retrain):        
         t.load(model_path=args.model_path)
-        t.evaluate()
+        #t.evaluate()
         for epoch in range(1, args.num_init_epochs+1):  #Initialization epoch
             t.train(current_epoch=epoch, is_init=True)
         for epoch in range(1, args.num_epochs+1): #Full Training Epochs
             t.train(current_epoch=epoch, is_init=False)
             if (epoch % args.val_every == 0):
                 t.evaluate(current_epoch=epoch)
-    else:       ##Train new model from scratch
+     
+     
+    ##Train new model from scratch            
+    else:       
         for epoch in range(1, args.num_init_epochs+1):
             t.train(current_epoch=epoch, is_init=True)
             t.TotLossPlotter.write(args.save_dir, is_init=True)

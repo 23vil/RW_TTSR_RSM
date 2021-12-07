@@ -50,7 +50,6 @@ class Trainer():
         
         if ((not self.args.cpu) and (self.args.num_gpu > 1)):
             self.vgg19 = nn.DataParallel(self.vgg19, list(range(self.args.num_gpu)))
-            #self.vgg19 = DistributedDataParallel(self.vgg19, list(range(self.args.num_gpu)))
         self.BatchNumber = len(self.dataloader['train'])
         self.params = [
             {"params": filter(lambda p: p.requires_grad, self.model.MainNet.parameters() if 
@@ -67,10 +66,7 @@ class Trainer():
             #self.scheduler = optim.lr_scheduler.StepLR(
                 #self.optimizer, step_size=self.args.decay, gamma=self.args.gamma)
             self.scheduler = optim.lr_scheduler.CyclicLR(self.optimizer, base_lr=self.args.lr_base, max_lr=self.args.lr_max, cycle_momentum=False, step_size_up=int(round(2*self.BatchNumber/3)), step_size_down=self.BatchNumber-int(round(2*self.BatchNumber/3)))
-            #if self.args.seperateRefLoss:
-            #    self.RefOptimizer = optim.Adam(self.RefSelModel.RSel.parameters(), betas=(args.beta1, args.beta2), eps=args.eps)
-            #    self.RefScheduler = optim.lr_scheduler.StepLR(
-            #        self.RefOptimizer, step_size=self.args.decay, gamma=self.args.gamma)
+
         self.max_psnr = 0.
         self.max_psnr_epoch = 0
         self.max_ssim = 0.
@@ -79,9 +75,10 @@ class Trainer():
             self.transformGray = torchvision.transforms.Grayscale(num_output_channels=3)
     
     def updateRefVectorDict(self):
-        for RefID in range(self.args.NumbRef):
-            Refsr = self.dataloader['ref'][RefID]['Ref_sr'].unsqueeze(dim=0).to(self.device)
-            self.model.RefSelector.updateRefVectorDict(Refsr, RefID, self.model.LTE)
+        with torch.no_grad():
+            for RefID in range(self.args.NumbRef):
+                Refsr = self.dataloader['ref'][RefID]['Ref_sr'].unsqueeze(dim=0).to(self.device)
+                self.model.RefSelector.updateRefVectorDict(Refsr, RefID, self.model.LTE)
             
     def load(self, model_path=None):
         if (model_path):
@@ -91,13 +88,6 @@ class Trainer():
             model_state_dict.update(model_state_dict_save)
             self.model.load_state_dict(model_state_dict)
 
-    #def loadRef(self, ref_model_path=None):
-    #    if (ref_model_path):
-    #        self.logger.info('load_ref_model_path: ' + ref_model_path)
-    #        model_state_dict_save = {k:v for k,v in torch.load(ref_model_path, map_location=self.device).items()}
-    #        model_state_dict = self.RefSelModel.state_dict()
-    #        model_state_dict.update(model_state_dict_save)
-    #        self.RefSelModel.load_state_dict(model_state_dict)
             
     def prepare(self, sample_batched):
         for key in sample_batched.keys():
@@ -122,13 +112,8 @@ class Trainer():
             lr_sr = sample_batched['LR_sr']
             hr = sample_batched['HR']
             
-            ##Prepare Reference Images
-            #if self.args.seperateRefLoss:
-            #    refID = self.RefSelModel(lr)    
-            #else:
-            #    refID = self.model.RefSelector(lr)
             refID = self.model.RefSelector(lr)
-            #break
+
             reftmp = []
             ref_srtmp = []
             for ID in refID:
@@ -143,15 +128,6 @@ class Trainer():
             ##Transfrom RGB SR output to greyscale
             if (self.args.gray_transform):
                 sr = self.transformGray(sr)
-            
-            ##Check if images are ba any means correct-- not rotated or anything similar
-            #sr_save = (sr.detach()+1.) * 127.5
-            #hr_save = (hr.detach()+1.) * 127.5
-            #millis = int(time.time()*10000)
-            #hr_save = np.transpose(hr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8) # squeeze delets all 1 values --- round() rounds to closest integer -- .cpu() moves object to cpu ---.numpy transforms object to numpy array--- transform to np.unit8 type
-            #imsave(os.path.join(self.args.save_dir, str(millis)+'hr.tif'), hr_save)
-            #sr_save = np.transpose(sr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8) # squeeze delets all 1 values --- round() rounds to closest integer -- .cpu() moves object to cpu ---.numpy transforms object to numpy array--- transform to np.unit8 type
-            #imsave(os.path.join(self.args.save_dir, str(millis)+'.tif'), sr_save)
             
             ### Calc and Store losses
             is_print = ((i_batch + 1) % self.args.print_every == 0) ### flag of print # only print if the batch index is dividable by "print_every"
@@ -361,14 +337,6 @@ class Trainer():
                                     heatMaps[datum.srcFile][4][line][row]+= datum.AdvLoss
                                     heatCounter[datum.srcFile][4][line][row]+= 1
                                 
-                    #def show_at_intervals(seq, interval, decimals=1):
-                        #x = np.copy(seq)
-                        #low, high = x.min(), x.max()
-                        #ar = np.arange(low,high,interval)
-                        #replate_at = np.searchsorted(x, ar)
-                        #new_ticks = np.full(x.shape, '', dtype=f'U{4+decimals}')
-                        #new_ticks[replate_at] = x[replate_at].round(decimals)
-                        #return new_ticks 
                     
                     if not is_init:
                         for image in originalImages:                       
@@ -482,7 +450,6 @@ class Trainer():
     def test(self):
         self.logger.info('Test process...')
         self.logger.info('lr path:     %s' %(self.args.lr_path))
-        #self.logger.info('ref path:    %s' %(self.args.ref_path))
         
         self.model.eval()
         
@@ -503,9 +470,7 @@ class Trainer():
 
         ### to tensor
         LR_t = torch.from_numpy(LR.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
-        LR_sr_t = torch.from_numpy(LR_sr.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
-        #Ref_t = torch.from_numpy(Ref.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
-        #Ref_sr_t = torch.from_numpy(Ref_sr.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
+
 
         ### Ref and Ref_sr
         refID = self.model.RefSelector(LR_t)        
@@ -531,106 +496,6 @@ class Trainer():
 
         self.logger.info('Test over.')
         
-    #def refTrain(self, current_epoch=0, is_init=False):
-        
-        #self.RefSelModel.train() 
-            
-        #for i_batch, sample_batched in enumerate(self.dataloader['train']):
-            #self.optimizer.zero_grad()
-            #sample_batched = self.prepare(sample_batched) #Batch is sent to GPU
-            
-            ##Image Batches or Placeholders
-            #lr = sample_batched['LR']
-            #lr_sr = sample_batched['LR_sr'] 
-            #hr = sample_batched['HR']
-            #downscl = torchvision.transforms.Resize((32,32), interpolation=2)
-            #upscl = torchvision.transforms.Resize((128,128), interpolation=2)
-            #hr_sr = upscl(downscl(hr))
-            #reftmp = []
-            #ref_srtmp = []
-            
-            
-            ##Get Reference Image according to RefSelModel
-            #refID = self.RefSelModel(lr, self.model.LTE)
-            #print(refID)
-            #break
-            #for ID in torch.argmax(refID,dim=1):
-                #reftmp.append(self.dataloader['ref'][ID]['Ref'])
-                #ref_srtmp.append(self.dataloader['ref'][ID]['Ref_sr'])
-            #ref = torch.stack((reftmp),0).to(self.device)
-            #ref_sr = torch.stack((ref_srtmp),0).to(self.device)
-            
-            ##Calclate Relevance of Refernce Image and transform into pytorch digestible form
-            #RefRelevanceTensor = self.model(lr=None, lrsr=lr_sr, ref=ref, refsr=ref_sr, relevance=True) #Here the models output for the inputs (arguments) is requested. (forward pass)
-            #HRRelevanceTensor = self.model(lr=None, lrsr=lr_sr, ref=hr, refsr=hr_sr, relevance=True)
-            
-            
-            #RefRelevanceTensor= RefRelevanceTensor[:,None,:]
-            #HRRelevanceTensor= HRRelevanceTensor[:,None,:]
-            #RefRelevanceTensor=RefRelevanceTensor-HRRelevanceTensor
-            
-            
-            #RelevanceTensor = torch.bmm(HRRelevanceTensor.transpose(1,2),RefRelevanceTensor)
-            ##lossFN = torch.nn.MSELoss(reduction='none')
-            ##RelevanceTensor= HRRelevanceTensor[..., None] - RefRelevanceTensor[..., None, :]
-            ##RelevanceTensor = lossFN(RefRelevanceTensor, HRRelevanceTensor)   
-            ##RSM_loss = RelevanceTensor.quantile(q=(1-lr_sr.size()[2]/ref.size()[2]), dim=1) #Does not work with quantiles --> Percentile would be usefull
-            #RSM_loss = torch.mean(RelevanceTensor, dim=1).mean(dim=1).square()#-0.6563   
-            #print("rsm vor invertierung-----"+str(RSM_loss))
-            ##RSM_loss = (1/RSM_loss)#.sigmoid()
-            ##if (i_batch % 2) == 0:
-            ##    RSM_loss = -RSM_loss#(1/RSM_loss)
-            ##else:
-            ##    RSM_loss = RSM_loss#-(1/RSM_loss)
-                
-            #print("--------------" )   
-            #print("argmax :"+str(torch.argmax(refID,dim=1)))
-            #print("RSM_loss:"+str(RSM_loss))
-            #print("RefID :"+str(refID))
-            #print("back: "+str((torch.argmax(refID,dim=1)-1)*(-1)))
-            
-            
-            ##print(self.RefSelModel.RSel.fc.weight.grad)
-           
-            ##torch.matmul(RSM_loss,refID).mean().backward()
-            ##(1/refID).mean().backward()
-            ##Backpropagate Relevance of Reference image to RefSelModel
-            ##(1/refID).mean(dim=1).size()
-            #(torch.argmax(refID,dim=1)-1)*(-1)
-            #refID.mean(dim=1).backward((torch.argmax(refID,dim=1)-1)*(-1)) #this only workd for the case that argmax =1 is trhe beste case you idiot!
-            ##refID.mean(dim=1).backward(RSM_loss)
-               
-            
-            #self.RefOptimizer.step()
-            ##print(self.RefSelModel.RSel.fc.weight.grad)
-            #self.RefOptimizer.zero_grad()
-            ##self.RefScheduler
-            
-            
-            
-        #if ((not is_init) and current_epoch % self.args.save_every == 0):
-            #self.logger.info('saving the reference model...')
-            #tmp = self.RefSelModel.state_dict()
-            #model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
-                #(('SearchNet' not in key) and ('_copy' not in key))}
-            #model_name = self.args.save_dir.strip('/')+'/model/ref_model_'+str(current_epoch).zfill(5)+'.pt'
-            #torch.save(model_state_dict, model_name)
-            ##if (self.args.gray_transform):
-            ##    sr = self.transformGray(sr)
-            ##Check if images are ba any means correct-- not rotated or anything similar
-            ##millis = int(time.time()*10000)
-            ##hr_save = np.transpose(hr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8) # squeeze delets all 1 values --- round() rounds to closest integer -- .cpu() moves object to cpu ---.numpy transforms object to numpy array--- transform to np.unit8 type
-            ##imsave(os.path.join(self.args.save_dir, str(millis)+'hr.tif'), hr_save)
-            ##sr_save = np.transpose(sr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8) # squeeze delets all 1 values --- round() rounds to closest integer -- .cpu() moves object to cpu ---.numpy transforms object to numpy array--- transform to np.unit8 type
-            ##imsave(os.path.join(self.args.save_dir, str(millis)+'.tif'), sr_save)
-            
-            ### calc loss
-            ##is_print = ((i_batch + 1) % self.args.print_every == 0) ## flag of print # only print if the batch index is dividable by "print_every"
-                
-            ##rec_loss = self.args.rec_w * self.loss_all['rec_loss'](sr, hr) #rec_w = weight of reconstruction loss - defined in train.sh (also default value in option.py) ---- loss_all defined in loss/loss.pt by "get_loss_dict" - change variable name in main.py
-            
 
-  
-        
         
         
