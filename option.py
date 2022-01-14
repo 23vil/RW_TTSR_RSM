@@ -36,7 +36,7 @@ parser.add_argument('--dataset_dir', type=str, default='/home/ps815691/datasets/
                     help='Directory of dataset')
 parser.add_argument('--gray', type=str2bool, default='True',
                     help='True if dataset consists of grayscale images')
-parser.add_argument('--gray_transform', type=str2bool, default='False',
+parser.add_argument('--gray_transform', type=str2bool, default='True',
                     help='If True, transforms SR output from RGB to 3-Channel Grayscale, before calculating loss')
 
 ### reference selection model settings
@@ -44,13 +44,7 @@ parser.add_argument('--reference_dir', type=str, default='/home/ps815691/dataset
                     help='Directory of reference images')
 parser.add_argument('--NumbRef', type=int, default=500,
                     help='Number of available ReferenceImages')
-#parser.add_argument('--refTrain', type=str2bool, default='False',
-#                    help='True: Train only Reference Selection Model, False: Train TTSR and RSM')
-#parser.add_argument('--seperateRefLoss', type=str2bool, default='False',
-#                    help='True: Use seperate metric as Loss for RSM training, False: Train TTSR and RSM end-to-end.')
-#parser.add_argument('--ref_model_path', type=str, default='None',
-#                    help='Path of reference model, if not included in main model.')
-parser.add_argument('--ref_crop_size', type=int, default='400',
+parser.add_argument('--ref_crop_size', type=int, default='0',
                     help='Uses random crops of ref_crop_size*ref_crop_size of the original reference image for training etc. If 0 --> Original image size (ref_image_size) is used.')
 parser.add_argument('--ref_image_size', type=int, default='0',
                     help='Has to be set if ref_crop_size is 0.')
@@ -126,6 +120,18 @@ parser.add_argument('--val_every', type=int, default=999999,
                     help='Validation period')
 parser.add_argument('--retrain', type=str2bool, default=False,
                     help='Whether load old model and train it again (True), or train new model (False).')
+parser.add_argument('--SaveOptimAndDiscr', type=str2bool, default=False,
+                    help='Optimizer and Discriminator will be saved.')
+parser.add_argument('--LoadOptimAndDiscr', type=str2bool, default=False,
+                    help='Optimizer and Discriminator will be loaded from files.')
+parser.add_argument('--optim_path', type=str, default=None,
+                    help='Path to saved TTSR model optimizer')
+parser.add_argument('--discr_path', type=str, default=None,
+                    help='Path to saved TTSR Discriminator')
+parser.add_argument('--discr_optim_path', type=str, default=None,
+                    help='Path to saved TTSR Discriminators Optimizer')
+
+
 
 ### evaluate / test / finetune setting
 parser.add_argument('--eval', type=str2bool, default=False,
@@ -136,8 +142,11 @@ parser.add_argument('--model_path', type=str, default=None,
                     help='The path of model to evaluation')
 parser.add_argument('--test', type=str2bool, default=False,
                     help='Test mode')
-parser.add_argument('--lr_path', type=str, default='./test/demo/lr/lr.png',
+parser.add_argument('--lr_path', type=str, default=None,
                     help='The path of input lr image when testing')
+parser.add_argument('--lr_folder', type=str, default=None,
+                    help='From all images within this folder test SR images will be generated')
+
 parser.add_argument('--ref_path', type=str, default='./test/demo/ref/ref.png',
                     help='The path of ref image when testing')
 parser.add_argument('--debug', type=str2bool, default=False,

@@ -1,12 +1,11 @@
 from option import args
 from utils import mkExpDir
-
 from dataset import dataloader
-#from dataset import RefRelevance
 
 from model import TTSR
 from model import RefSelector
 from loss.loss import get_loss_dict
+
 from trainer import Trainer
 from torch.nn.parallel import DistributedDataParallel
 import numpy as np
@@ -39,8 +38,8 @@ if __name__ == '__main__':
     
     ### Initialize loss calculation
     _loss_all = get_loss_dict(args, _logger, device) #defined in loss/loss.pt
-    
-    
+
+ 
     ### trainer.py initialization --> In this file the training, evaluation happens. Also test images are created in here.
     t = Trainer(args, device,  _logger, _dataloader, _model, _loss_all)
     
@@ -55,13 +54,15 @@ if __name__ == '__main__':
     
     ##Evaluation Mode - load pretrained model --> then evaluate    
     elif (args.eval):   
-        t.load(model_path=args.model_path)
+        t.load(model_path=args.model_path, discr_path=args.discr_path)
         t.evaluate()
     
     
     ##Load pretrained Model and continue training this model   
     elif (args.retrain):        
         t.load(model_path=args.model_path)
+        if args.LoadOptimAndDiscr:           
+            t.loadOptimAndDiscriminator(optim_path=args.optim_path, discr_path=args.discr_path, discr_optim_path=args.discr_optim_path)
         #t.evaluate()
         for epoch in range(1, args.num_init_epochs+1):  #Initialization epoch
             t.train(current_epoch=epoch, is_init=True)

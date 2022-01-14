@@ -71,6 +71,7 @@ class Trainer():
         self.max_psnr_epoch = 0
         self.max_ssim = 0.
         self.max_ssim_epoch = 0
+        
         if (self.args.gray_transform):
             self.transformGray = torchvision.transforms.Grayscale(num_output_channels=3)
     
@@ -80,19 +81,42 @@ class Trainer():
                 Refsr = self.dataloader['ref'][RefID]['Ref_sr'].unsqueeze(dim=0).to(self.device)
                 self.model.RefSelector.updateRefVectorDict(Refsr, RefID, self.model.LTE)
             
-    def load(self, model_path=None):
+    def load(self, model_path=None, discr_path=None):
         if (model_path):
             self.logger.info('load_model_path: ' + model_path)
             model_state_dict_save = {k:v for k,v in torch.load(model_path, map_location=self.device).items()}
             model_state_dict = self.model.state_dict()
             model_state_dict.update(model_state_dict_save)
             self.model.load_state_dict(model_state_dict)
-
+        if (discr_path):
+            self.loss_all['adv_loss'].update_state_dict(discr_path)
+                
+            
+    def loadOptimAndDiscriminator(self, optim_path=None, discr_path=None, discr_optim_path=None):
+        if (optim_path and discr_path and discr_optim_path):
+            self.logger.info('load_optim_path: ' + optim_path)
+            optim_state_dict_save = {k:v for k,v in torch.load(optim_path, map_location=self.device).items()}
+            optim_state_dict = self.optimizer.state_dict()
+            optim_state_dict.update(optim_state_dict_save)
+            self.optimizer.load_state_dict(optim_state_dict)
+            
+            self.logger.info('load_discr_path: ' + discr_path)
+            self.logger.info('load_discr_optim_path: ' + discr_path)
+            self.loss_all['adv_loss'].update_state_dict(discr_path, discr_optim_path)
+            
+            
             
     def prepare(self, sample_batched):
         for key in sample_batched.keys():
             sample_batched[key] = sample_batched[key].to(self.device)
         return sample_batched
+    
+    
+    
+    
+    
+### def train defines the training of a model -------------------------------------------------------------------------------------------------
+   
     def train(self, current_epoch=0, is_init=False):
         
         self.model.train() #self.model is TTSR.py from model folder
@@ -111,8 +135,8 @@ class Trainer():
             lr = sample_batched['LR']
             lr_sr = sample_batched['LR_sr']
             hr = sample_batched['HR']
-            
-            refID = self.model.RefSelector(lr)
+            with torch.no_grad():
+                refID = self.model.RefSelector(lr_sr)
 
             reftmp = []
             ref_srtmp = []
@@ -181,24 +205,57 @@ class Trainer():
             self.scheduler.step()
             self.updateRefVectorDict()
             
-        ##Save Model
+        ##Save Model & Discriminator
         if ((not is_init) and current_epoch % self.args.save_every == 0):
+            #TTSR Model
             self.logger.info('saving the model...')
             tmp = self.model.state_dict()
             model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
                 (('SearchNet' not in key) and ('_copy' not in key))}
             model_name = self.args.save_dir.strip('/')+'/model/model_'+str(current_epoch).zfill(5)+'.pt'
             torch.save(model_state_dict, model_name)
+            del tmp
+            
+            if self.args.SaveOptimAndDiscr:
+                self.logger.info('saving the optimizer...')
+                tmp = self.optimizer.state_dict()
+                optimizer_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
+                (('SearchNet' not in key) and ('_copy' not in key))}
+                model_name = self.args.save_dir.strip('/')+'/model/optimizer_'+str(current_epoch).zfill(5)+'.pt'
+                torch.save(optimizer_state_dict, model_name)
+                
+                
+                #Discriminator
+                self.logger.info('saving the discriminator...')
+                tmp_model, tmp_optim = self.loss_all['adv_loss'].get_state_dict()
+                
+                discriminator_state_dict = {key.replace('module.',''): tmp_model[key] for key in tmp_model if 
+                    (('SearchNet' not in key) and ('_copy' not in key))}
+                model_name = self.args.save_dir.strip('/')+'/model/discriminator_'+str(current_epoch).zfill(5)+'.pt'
+                torch.save(discriminator_state_dict, model_name)
+                
+                self.logger.info('saving the discriminator optimizer...')
+                discr_optim_state_dict = {key.replace('module.',''): tmp_optim[key] for key in tmp_optim if 
+                    (('SearchNet' not in key) and ('_copy' not in key))}
+                model_name = self.args.save_dir.strip('/')+'/model/discriminator_optim_'+str(current_epoch).zfill(5)+'.pt'
+                torch.save(discr_optim_state_dict, model_name)
+            
         
         if ((is_init) and current_epoch % self.args.save_every == 0):
+            #TTSR Model in Initial Trailing
             self.logger.info('saving the init model...')
             tmp = self.model.state_dict()
             model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
                 (('SearchNet' not in key) and ('_copy' not in key))}
             model_name = self.args.save_dir.strip('/')+'/model/init-model_'+str(current_epoch).zfill(5)+'.pt'
             torch.save(model_state_dict, model_name)
+            del tmp
+          
          
          
+         
+         
+### Evaluation is defined here----------------------------------------------------------------------------------------         
          
     def evaluate(self, current_epoch=0, is_init=False):
         
@@ -447,52 +504,102 @@ class Trainer():
 
         self.logger.info('Evaluation over.')
         
+####Generation of test images is defined below----------------------------------------------------------------------------
+        
     def test(self):
         self.logger.info('Test process...')
-        self.logger.info('lr path:     %s' %(self.args.lr_path))
+        
         
         self.model.eval()
         
         ### LR and LR_sr
-        LR = imread(self.args.lr_path)
-        if self.args.gray:
-            LR = np.array([LR, LR, LR]).transpose(1,2,0) #transformation to RGB
-        h1, w1 = LR.shape[:2]
-        LR_sr = np.array(Image.fromarray(LR).resize((w1*4, h1*4), Image.BICUBIC))        
-           
-        ### change type
-        LR = LR.astype(np.float32)
-        LR_sr = LR_sr.astype(np.float32)
+        if self.args.lr_path:
+            self.logger.info('lr path:     %s' %(self.args.lr_path))
+            LR = imread(self.args.lr_path)
+ 
+            if self.args.gray:
+                LR = np.array([LR, LR, LR]).transpose(1,2,0) #transformation to RGB
+            h1, w1 = LR.shape[:2]
+            LR_sr = np.array(Image.fromarray(LR).resize((w1*4, h1*4), Image.BICUBIC))        
+            
+            ### change type
+            LR = LR.astype(np.float32)
+            LR_sr = LR_sr.astype(np.float32)
 
-        ### rgb range to [-1, 1]
-        LR = LR / 127.5 - 1.
-        LR_sr = LR_sr / 127.5 - 1.
+            ### rgb range to [-1, 1]
+            LR = LR / 127.5 - 1.
+            LR_sr = LR_sr / 127.5 - 1.
 
-        ### to tensor
-        LR_t = torch.from_numpy(LR.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
+            ### to tensor
+            LR_t = torch.from_numpy(LR.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
+            LR_sr_t = torch.from_numpy(LR_sr.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
+
+            ### Ref and Ref_sr
+            refID = self.model.RefSelector(LR_t)        
+            reftmp = []
+            ref_srtmp = []
+            for ID in refID:
+                reftmp.append(self.dataloader['ref'][ID]['Ref']) 
+                ref_srtmp.append(self.dataloader['ref'][ID]['Ref_sr'])
+            Ref = torch.stack((reftmp),0).to(self.device)
+            Ref_sr = torch.stack((ref_srtmp),0).to(self.device)
 
 
-        ### Ref and Ref_sr
-        refID = self.model.RefSelector(LR_t)        
-        reftmp = []
-        ref_srtmp = []
-        for ID in refID:
-            reftmp.append(self.dataloader['ref'][ID]['Ref']) 
-            ref_srtmp.append(self.dataloader['ref'][ID]['Ref_sr'])
-        Ref = torch.stack((reftmp),0).to(self.device)
-        Ref_sr = torch.stack((ref_srtmp),0).to(self.device)
+            
+            with torch.no_grad():
+                sr, _, _, _, _ = self.model(lr=LR_t, lrsr=LR_sr_t, ref=Ref, refsr=Ref_sr)
+                if (self.args.gray_transform):
+                    sr = self.transformGray(sr)
+                sr_save = (sr+1.) * 127.5
+                sr_save = np.transpose(sr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8)
+                save_path = os.path.join(self.args.save_dir, 'save_results', os.path.basename(self.args.lr_path))
+                imsave(save_path, sr_save)
+                self.logger.info('output path: %s' %(save_path))
+        elif self.args.lr_folder:
+            imageFiles = [os.path.join(self.args.lr_folder, f) for f in os.listdir(self.args.lr_folder) if f.endswith('.tif')]
+            for lrPath in imageFiles:
+                self.logger.info('lr path:     %s' %(lrPath))
+                LR = imread(lrPath)
+    
+                if self.args.gray:
+                    LR = np.array([LR, LR, LR]).transpose(1,2,0) #transformation to RGB
+                h1, w1 = LR.shape[:2]
+                LR_sr = np.array(Image.fromarray(LR).resize((w1*4, h1*4), Image.BICUBIC))        
+                
+                ### change type
+                LR = LR.astype(np.float32)
+                LR_sr = LR_sr.astype(np.float32)
+
+                ### rgb range to [-1, 1]
+                LR = LR / 127.5 - 1.
+                LR_sr = LR_sr / 127.5 - 1.
+
+                ### to tensor
+                LR_t = torch.from_numpy(LR.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
+                LR_sr_t = torch.from_numpy(LR_sr.transpose((2,0,1))).unsqueeze(0).float().to(self.device)
+
+                ### Ref and Ref_sr
+                refID = self.model.RefSelector(LR_t)        
+                reftmp = []
+                ref_srtmp = []
+                for ID in refID:
+                    reftmp.append(self.dataloader['ref'][ID]['Ref']) 
+                    ref_srtmp.append(self.dataloader['ref'][ID]['Ref_sr'])
+                Ref = torch.stack((reftmp),0).to(self.device)
+                Ref_sr = torch.stack((ref_srtmp),0).to(self.device)
 
 
-        
-        with torch.no_grad():
-            sr, _, _, _, _ = self.model(lr=LR_t, lrsr=LR_sr_t, ref=Ref, refsr=Ref_sr)
-            if (self.args.gray_transform):
-                sr = self.transformGray(sr)
-            sr_save = (sr+1.) * 127.5
-            sr_save = np.transpose(sr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8)
-            save_path = os.path.join(self.args.save_dir, 'save_results', os.path.basename(self.args.lr_path))
-            imsave(save_path, sr_save)
-            self.logger.info('output path: %s' %(save_path))
+                
+                with torch.no_grad():
+                    sr, _, _, _, _ = self.model(lr=LR_t, lrsr=LR_sr_t, ref=Ref, refsr=Ref_sr)
+                    if (self.args.gray_transform):
+                        sr = self.transformGray(sr)
+                    sr_save = (sr+1.) * 127.5
+                    sr_save = np.transpose(sr_save.squeeze().round().cpu().numpy(), (1, 2, 0)).astype(np.uint8)
+                    save_path = os.path.join(self.args.save_dir, 'save_results', os.path.basename(lrPath))
+                    imsave(save_path, sr_save)
+                    self.logger.info('output path: %s' %(save_path))
+
 
         self.logger.info('Test over.')
         

@@ -29,7 +29,8 @@ class RefSelector(nn.Module):
             self.RefVectorDict[RefID] = self.Img2Vec.get_vec(LTEref)
         
     def forward(self, LR):
-        _, _, LTElr = self.LTE(LR)
+        with torch.no_grad():
+            _, _, LTElr = self.LTE(LR)
         LRVector = self.Img2Vec.get_vec(LTElr)
            
         MaxSimIDs = []

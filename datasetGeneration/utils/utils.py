@@ -100,21 +100,14 @@ def draw_tile(img, tile_sz):
     tile = img[xs,ys].copy()
     return tile, (xs,ys)
   
-#def draw_specific_tile(img, tile_sz, x, y):
-    #max_x,max_y = img.shape
-    #x = 4*x if max_x > 4*tile_sz else 0
-    #y = 4*y if max_y > 4*tile_sz else 0
-    #xs = slice(x,min(x+4*tile_sz, max_x))
-    #ys = slice(y,min(y+4*tile_sz, max_y))
-    #tile = img[xs,ys].copy()
-    #return tile, (xs,ys)
+
   
 def draw_specific_tile(img, LRcrop, box, magnification):
     max_x,max_y = img.shape
     SSIM_index = {}
     PSNR_index = {}
-    l = -10
-    u = 10
+    l = -15
+    u = 16
     for row in range(l,u):
         for column in range(l,u):
             x = (magnification * box[0])+column
@@ -129,6 +122,7 @@ def draw_specific_tile(img, LRcrop, box, magnification):
                 SSIM_index[(column, row)] = calc_image_deviation(tile,np.array(LRcrop))[1]
                 PSNR_index[(column, row)] = calc_image_deviation(tile,np.array(LRcrop))[0]
     best = max(SSIM_index, key=SSIM_index.get)
+    
     #if max(SSIM_index.values()) < 0.32:
         #print("PSNR")
         #best = max(PSNR_index, key=PSNR_index.get)
@@ -170,16 +164,16 @@ def check_tile(img, thresh, thresh_pct):
 
 def draw_random_tile(img_data, tile_sz, thresh, thresh_pct):
     max_tries = 200
-
     found_tile = False
     tries = 0
+    
     while not found_tile:
         tile, (xs,ys) = draw_tile(img_data, tile_sz)
         found_tile = check_tile(tile, thresh, thresh_pct)
-        # found_tile = True
         tries += 1
         if tries > (max_tries/2): thresh_pct /= 2
         if tries > max_tries: found_tile = True
+        
     box = [xs.start, ys.start, xs.stop, ys.stop]
     return PIL.Image.fromarray(tile), box
 

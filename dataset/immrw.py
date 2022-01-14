@@ -151,15 +151,15 @@ class TrainSet(Dataset):
 
 class TestSet(Dataset):
     def __init__(self, args, transform=transforms.Compose([ToTensor()])):
-        self.HR_list = sorted(glob.glob(os.path.join(args.dataset_dir, 'test/HR/', '*.tif'))) #path had to be altered manually --- Why *_0.png files for test?
-        self.LR_list = sorted(glob.glob(os.path.join(args.dataset_dir, 'test/LR/', '*.tif')))  
+        self.HR_list = sorted(glob.glob(os.path.join(args.dataset_dir, 'valid/HR/', '*.tif'))) #path had to be altered manually --- Why *_0.png files for test?
+        self.LR_list = sorted(glob.glob(os.path.join(args.dataset_dir, 'valid/LR/', '*.tif')))  
         self.args = args
         if self.args.debug:
             self.dfTiles = pd.read_csv(os.path.join(args.dataset_dir, 'tiles.csv'))
             self.box = []
             self.srcFile = []
             for LR in self.LR_list:
-                box = self.dfTiles.loc[self.dfTiles['LRfilename'] == LR[-13:]].box.item()
+                box = self.dfTiles.loc[self.dfTiles['LRfilename'] == os.path.basename(LR)].box.item() 
                 box = [int(s) for s in re.findall(r'-?\d+\.?\d*', box)]
                 self.box.append(box)
                 self.srcFile.append(LR[-6:])

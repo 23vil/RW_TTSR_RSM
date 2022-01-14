@@ -134,10 +134,23 @@ class AdversarialLoss(nn.Module):
         # Generator loss
         return loss_g
   
-    def state_dict(self):
+    def get_state_dict(self):
         D_state_dict = self.discriminator.state_dict()
         D_optim_state_dict = self.optimizer.state_dict()
         return D_state_dict, D_optim_state_dict
+    
+    def update_state_dict(self, discr_path=None, discr_optim_path=None):
+        discr_state_dict_save = {k:v for k,v in torch.load(discr_path, map_location=self.device).items()}
+        discr_state_dict = self.discriminator.state_dict()
+        discr_state_dict.update(discr_state_dict_save)            
+        self.discriminator.load_state_dict(discr_state_dict)
+        if (discr_optim_path):
+            discr_optim_state_dict_save = {k:v for k,v in torch.load(discr_optim_path, map_location=self.device).items()}
+            discr_optim_state_dict = self.optimizer.state_dict()
+            discr_optim_state_dict.update(discr_optim_state_dict_save)            
+            self.optimizer.load_state_dict(discr_optim_state_dict)
+        
+
 
 
 def get_loss_dict(args, logger, device):
