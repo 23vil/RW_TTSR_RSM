@@ -1,6 +1,0 @@
-[2021-07-26 21:25:19,177] - [trainer.py file line:50] - INFO: load_model_path: ./pretrainedModels/TTSR.pt
-[2021-07-26 21:25:23,010] - [trainer.py file line:185] - INFO: Test process...
-[2021-07-26 21:25:23,010] - [trainer.py file line:186] - INFO: lr path:     ./test/demo/lr/2.tif
-[2021-07-26 21:25:23,010] - [trainer.py file line:187] - INFO: ref path:    ./test/demo/ref/2.tif
-[2021-07-26 21:25:27,447] - [trainer.py file line:231] - INFO: output path: ./test/demo/output/2021_07_26-21_25/save_results/2.tif
-[2021-07-26 21:25:27,448] - [trainer.py file line:233] - INFO: Test over.

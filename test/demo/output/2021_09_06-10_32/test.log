@@ -1,6 +1,0 @@
-[2021-09-06 10:33:24,786] - [trainer.py file line:72] - INFO: load_model_path: ./pretrainedModels/model_00001.pt
-[2021-09-06 10:33:38,080] - [trainer.py file line:285] - INFO: Test process...
-[2021-09-06 10:33:38,080] - [trainer.py file line:286] - INFO: lr path:     ./test/demo/lr/005008_42.tif
-[2021-09-06 10:33:38,080] - [trainer.py file line:287] - INFO: ref path:    ./test/demo/ref/83.tif
-[2021-09-06 10:33:41,179] - [trainer.py file line:333] - INFO: output path: ./test/demo/output/2021_09_06-10_32/save_results/005008_42.tif
-[2021-09-06 10:33:41,179] - [trainer.py file line:335] - INFO: Test over.

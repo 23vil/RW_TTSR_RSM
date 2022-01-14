@@ -1,7 +1,0 @@
-[2021-09-20 18:18:28,067] - [trainer.py file line:92] - INFO: Current epoch learning rate: 1.000000e-04
-[2021-09-20 18:18:28,819] - [trainer.py file line:125] - INFO: epoch: 1	 batch: 1
-[2021-09-20 18:18:28,821] - [trainer.py file line:127] - INFO: rec_loss: 0.1902880669
-[2021-09-20 18:18:28,836] - [trainer.py file line:137] - INFO: per_loss: 0.0091797672
-[2021-09-20 18:18:28,845] - [trainer.py file line:146] - INFO: tpl_loss: 0.0065583754
-[2021-09-20 18:18:29,127] - [trainer.py file line:152] - INFO: adv_loss: 0.0011327863
-[2021-09-20 18:18:29,127] - [trainer.py file line:155] - INFO: total_loss: 0.2071589977

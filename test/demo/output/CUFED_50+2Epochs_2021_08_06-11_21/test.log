@@ -1,6 +1,0 @@
-[2021-08-06 11:21:27,277] - [trainer.py file line:53] - INFO: load_model_path: ./pretrainedModels/CUFED_model_00050.pt
-[2021-08-06 11:21:27,369] - [trainer.py file line:192] - INFO: Test process...
-[2021-08-06 11:21:27,370] - [trainer.py file line:193] - INFO: lr path:     ./test/demo/lr/1.png
-[2021-08-06 11:21:27,370] - [trainer.py file line:194] - INFO: ref path:    ./test/demo/ref/0.png
-[2021-08-06 11:21:27,960] - [trainer.py file line:238] - INFO: output path: ./test/demo/output/2021_08_06-11_21/save_results/1.png
-[2021-08-06 11:21:27,960] - [trainer.py file line:240] - INFO: Test over.
