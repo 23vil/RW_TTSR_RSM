@@ -28,6 +28,8 @@ parser.add_argument('--cpu', type=str2bool, default=False,
                     help='Use CPU to run code')
 parser.add_argument('--num_gpu', type=int, default=1,
                     help='The number of GPU used in training')
+parser.add_argument('--cluster', type=str2bool, default='False',
+                    help='Depending on the operating system, that this code is run on, file links are interpreted differently. By setting --cluster to true, the state that I could run on RWTHs cluster is used. --cluster = False can be run on a local machine')
 
 ### dataset setting
 parser.add_argument('--dataset', type=str, default='IMMRW',

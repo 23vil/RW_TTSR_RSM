@@ -212,7 +212,10 @@ class Trainer():
             tmp = self.model.state_dict()
             model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
                 (('SearchNet' not in key) and ('_copy' not in key))}
-            model_name = self.args.save_dir.strip('/')+'/model/model_'+str(current_epoch).zfill(5)+'.pt'
+            if self.args.cluster:
+                model_name = self.args.save_dir.strip('/')+'/model/model_'+str(current_epoch).zfill(5)+'.pt'
+            else:
+                model_name = self.args.save_dir+'/model/model_'+str(current_epoch).zfill(5)+'.pt'
             torch.save(model_state_dict, model_name)
             del tmp
             
@@ -221,7 +224,10 @@ class Trainer():
                 tmp = self.optimizer.state_dict()
                 optimizer_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
                 (('SearchNet' not in key) and ('_copy' not in key))}
-                model_name = self.args.save_dir.strip('/')+'/model/optimizer_'+str(current_epoch).zfill(5)+'.pt'
+                if self.args.cluster:
+                    model_name = self.args.save_dir.strip('/')+'/model/optimizer_'+str(current_epoch).zfill(5)+'.pt'
+                else:
+                    model_name = self.args.save_dir+'/model/optimizer_'+str(current_epoch).zfill(5)+'.pt'
                 torch.save(optimizer_state_dict, model_name)
                 
                 
@@ -231,13 +237,19 @@ class Trainer():
                 
                 discriminator_state_dict = {key.replace('module.',''): tmp_model[key] for key in tmp_model if 
                     (('SearchNet' not in key) and ('_copy' not in key))}
-                model_name = self.args.save_dir.strip('/')+'/model/discriminator_'+str(current_epoch).zfill(5)+'.pt'
+                if self.args.cluster:
+                    model_name = self.args.save_dir.strip('/')+'/model/discriminator_'+str(current_epoch).zfill(5)+'.pt'
+                else:
+                    model_name = self.args.save_dir+'/model/discriminator_'+str(current_epoch).zfill(5)+'.pt'
                 torch.save(discriminator_state_dict, model_name)
                 
                 self.logger.info('saving the discriminator optimizer...')
                 discr_optim_state_dict = {key.replace('module.',''): tmp_optim[key] for key in tmp_optim if 
                     (('SearchNet' not in key) and ('_copy' not in key))}
-                model_name = self.args.save_dir.strip('/')+'/model/discriminator_optim_'+str(current_epoch).zfill(5)+'.pt'
+                if self.args.cluster:
+                    model_name = self.args.save_dir.strip('/')+'/model/discriminator_optim_'+str(current_epoch).zfill(5)+'.pt'
+                else:
+                    model_name = self.args.save_dir+'/model/discriminator_optim_'+str(current_epoch).zfill(5)+'.pt'
                 torch.save(discr_optim_state_dict, model_name)
             
         
@@ -247,7 +259,10 @@ class Trainer():
             tmp = self.model.state_dict()
             model_state_dict = {key.replace('module.',''): tmp[key] for key in tmp if 
                 (('SearchNet' not in key) and ('_copy' not in key))}
-            model_name = self.args.save_dir.strip('/')+'/model/init-model_'+str(current_epoch).zfill(5)+'.pt'
+            if self.args.cluster:
+                model_name = self.args.save_dir.strip('/')+'/model/init-model_'+str(current_epoch).zfill(5)+'.pt'
+            else:
+                model_name = self.args.save_dir+'/model/init-model_'+str(current_epoch).zfill(5)+'.pt'
             torch.save(model_state_dict, model_name)
             del tmp
           
@@ -452,7 +467,10 @@ class Trainer():
                             (('SearchNet' not in key) and ('_copy' not in key))}
                         if self.nameOfmodel:
                             os.remove(str(self.nameOfmodel))
-                        self.nameOfmodel = self.args.save_dir.strip('/')+'/model/best_model_loss_'+str(current_epoch)+'.pt'
+                        if self.args.cluster:
+                            self.nameOfmodel = self.args.save_dir.strip('/')+'/model/best_model_loss_'+str(current_epoch)+'.pt'
+                        else:
+                            self.nameOfmodel = self.args.save_dir+'/model/best_model_loss_'+str(current_epoch)+'.pt'
                         torch.save(model_state_dict, self.nameOfmodel)
                 else:
                     self.bestLoss = val_loss
@@ -468,7 +486,10 @@ class Trainer():
                             (('SearchNet' not in key) and ('_copy' not in key))}
                         if self.nameOfmodel_psnr:
                             os.remove(str(self.nameOfmodel_psnr))
-                        self.nameOfmodel_psnr = self.args.save_dir.strip('/')+'/model/best_model_psnr_'+str(current_epoch)+'.pt'
+                        if self.args.cluster:
+                            self.nameOfmodel_psnr = self.args.save_dir.strip('/')+'/model/best_model_psnr_'+str(current_epoch)+'.pt'
+                        else:
+                            self.nameOfmodel_psnr = self.args.save_dir+'/model/best_model_psnr_'+str(current_epoch)+'.pt'
                         torch.save(model_state_dict, self.nameOfmodel_psnr)
                 else:
                     self.best_psnr = psnr_ave
@@ -485,7 +506,10 @@ class Trainer():
                             (('SearchNet' not in key) and ('_copy' not in key))}
                         if self.nameOfmodel_ssim:
                             os.remove(str(self.nameOfmodel_ssim))
-                        self.nameOfmodel_ssim = self.args.save_dir.strip('/')+'/model/best_model_ssim_'+str(current_epoch)+'.pt'
+                        if self.args.cluster:
+                            self.nameOfmodel_ssim = self.args.save_dir.strip('/')+'/model/best_model_ssim_'+str(current_epoch)+'.pt'
+                        else:
+                            self.nameOfmodel_ssim = self.args.save_dir+'/model/best_model_ssim_'+str(current_epoch)+'.pt'
                         torch.save(model_state_dict, self.nameOfmodel_ssim)
                 else:
                     self.best_ssim = ssim_ave

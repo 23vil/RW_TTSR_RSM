@@ -44,8 +44,6 @@ python main.py --save_dir ../../../../work/ps815691/trainingResults/$save_folder
                --discr_path /work/ps815691/trainingResults/ModelA_HT+15/model/discriminator_00015.pt\
                --discr_optim_path /work/ps815691/trainingResults/ModelA_HT+15/model/discriminator_optim_00015.pt
                
-               #batchsize 10
+
                
-#BATCH SIZE: 10 FOR REF_CROP_SIZE = 10         --save_dir ./train/IMM/TTSR/$save_folder/       
-#               --dataset_dir /home/ps815691/datasets/32-128_1024-4096_fullSet_noSSIMTreshold\
-# Small32-128_1024-4096_SSIMTreshold0-0
+#BATCH SIZE: 10 
